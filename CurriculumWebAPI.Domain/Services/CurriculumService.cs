@@ -1,4 +1,4 @@
-﻿using MyPortfolio.CurriculumWebAPI.Models;
+﻿using CurriculumWebAPI.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +21,20 @@ namespace CurriculumWebAPI.Domain.Services
             var result = _repository.GetById(id);
 
             return result;
+        }
+
+
+        public bool Save(Curriculum curriculum)
+        {
+            if(curriculum is null)
+                return false;
+
+            var result = _repository.AddNew(curriculum);
+            
+            if(result)
+                return true;
+
+            return false;
         }
     }
 }

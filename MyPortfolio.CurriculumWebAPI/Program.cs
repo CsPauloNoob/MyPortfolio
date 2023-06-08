@@ -1,4 +1,5 @@
 
+using CurriculumWebAPI.App.MapperConfig;
 using CurriculumWebAPI.DI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 BootStrap.Configure(builder.Services);
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 

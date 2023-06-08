@@ -1,8 +1,11 @@
-﻿using CurriculumWebAPI.Domain;
+﻿using AutoMapper;
+using CurriculumWebAPI.Domain;
+using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Domain.Services;
+using CurriculumWebAPI.Infrastructure.Data.Context;
 using CurriculumWebAPI.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using MyPortfolio.CurriculumWebAPI.Models;
+using Microsoft.EntityFrameworkCore.Sqlite;
 
 namespace CurriculumWebAPI.DI
 {
@@ -10,9 +13,10 @@ namespace CurriculumWebAPI.DI
     {
         public static void Configure(IServiceCollection services)
         {
-
-            services.AddTransient(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
+            services.AddScoped(typeof(MyContext));
+            services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
             services.AddTransient(typeof(CurriculumService));
+            services.AddTransient(typeof(Mapper));
         }
     }
 }

@@ -8,6 +8,7 @@ namespace CurriculumWebAPI.Domain
 {
     public interface IRepository<T> where T : class
     {
+        public bool AddNew(T entity);
         public T GetById(int id);
         public IEnumerable<T> GetAll();
         public T Update(int id);

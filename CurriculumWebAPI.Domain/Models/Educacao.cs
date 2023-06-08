@@ -1,4 +1,4 @@
-﻿namespace MyPortfolio.CurriculumWebAPI.Models
+﻿namespace CurriculumWebAPI.Domain.Models
 {
     public class Educacao
     {

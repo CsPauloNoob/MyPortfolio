@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CurriculumWebAPI.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using MyPortfolio.CurriculumWebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,6 @@ namespace CurriculumWebAPI.Infrastructure.Data.Context
         {
             builder.UseSqlite("Data Source=CurriculumDb.sqlite;");
         }
-
 
         public DbSet<Curriculum> Curriculum { get; set; }
     }

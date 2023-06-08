@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurriculumWebAPI", "MyPortfolio.CurriculumWebAPI\CurriculumWebAPI.csproj", "{0671370E-41B2-41F4-BC0A-0304D8C8C40B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurriculumWebAPI.App", "MyPortfolio.CurriculumWebAPI\CurriculumWebAPI.App.csproj", "{0671370E-41B2-41F4-BC0A-0304D8C8C40B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{8F8BD24A-856F-4170-B289-F7179D0461C1}"
 EndProject
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurriculumWebAPI.Domain", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurriculumWebAPI.Infrastructure", "CurriculumWebAPI.Infrastructure\CurriculumWebAPI.Infrastructure.csproj", "{3426CAED-4FBA-4D5C-BD63-0DFF54E143BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurriculumWebAPI.DI", "CurriculumWebAPI.DI\CurriculumWebAPI.DI.csproj", "{2707DA90-246A-4E94-B821-7355BCBCFF4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurriculumWebAPI.DI", "CurriculumWebAPI.DI\CurriculumWebAPI.DI.csproj", "{2707DA90-246A-4E94-B821-7355BCBCFF4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

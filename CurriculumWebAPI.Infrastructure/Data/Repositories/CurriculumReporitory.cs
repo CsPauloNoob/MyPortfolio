@@ -1,6 +1,6 @@
 ﻿using CurriculumWebAPI.Domain;
+using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Infrastructure.Data.Context;
-using MyPortfolio.CurriculumWebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,15 +45,19 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
         public Curriculum GetById(int id)
         {
-            Curriculum? curriculo = _context.Curriculum.Find(id);
+            var curriculo = _context.Curriculum.Find(id);
 
-            if (curriculo != null)
-                return curriculo;
-            
-            return null;
+
+            return curriculo;
         }
 
+        public bool AddNew(Curriculum curriculum)
+        {
+            _context.Curriculum.Add(curriculum);
+            _context.SaveChangesAsync();
 
+            return true;
+        }
 
         public Curriculum Update(int id)
         {

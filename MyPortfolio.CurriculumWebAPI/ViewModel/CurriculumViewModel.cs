@@ -1,8 +1,6 @@
-﻿using System.Reflection.Metadata;
-
-namespace CurriculumWebAPI.Domain.Models
+﻿namespace CurriculumWebAPI.App.ViewModel
 {
-    public class Curriculum
+    public class CurriculumViewModel
     {
         public int Id { get; set; }
         public string Nome { get; set; }
@@ -12,7 +10,7 @@ namespace CurriculumWebAPI.Domain.Models
         public string? ExperienciaProfissional { get; set; }
         public string? Habilidades { get; set; }
         public string? SobreMim { get; set; }
-        public Educacao? Educacao { get; set; }
+        public string? Formação { get; set; }
         public DateTime DataCriacao { get; set; }
     }
 }
