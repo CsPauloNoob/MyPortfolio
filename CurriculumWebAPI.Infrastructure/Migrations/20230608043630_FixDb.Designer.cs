@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CurriculumWebAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230608031116_FixDb")]
+    [Migration("20230608043630_FixDb")]
     partial class FixDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,19 +63,17 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Educacao", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AnoConclusao")
+                    b.Property<int?>("AnoConclusao")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Curso")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Instituicao")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

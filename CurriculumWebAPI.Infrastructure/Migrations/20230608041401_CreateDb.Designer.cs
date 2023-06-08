@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CurriculumWebAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230606044737_CreateDb")]
+    [Migration("20230608041401_CreateDb")]
     partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,7 +19,7 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.16");
 
-            modelBuilder.Entity("MyPortfolio.CurriculumWebAPI.Models.Curriculum", b =>
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Curriculum", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -27,6 +27,9 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("EducacaoId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -53,19 +56,18 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EducacaoId");
+
                     b.ToTable("Curriculum");
                 });
 
-            modelBuilder.Entity("MyPortfolio.CurriculumWebAPI.Models.Educacao", b =>
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Educacao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("AnoConclusao")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("CurriculumId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Curso")
@@ -78,20 +80,15 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurriculumId");
-
                     b.ToTable("Educacao");
                 });
 
-            modelBuilder.Entity("MyPortfolio.CurriculumWebAPI.Models.Educacao", b =>
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Curriculum", b =>
                 {
-                    b.HasOne("MyPortfolio.CurriculumWebAPI.Models.Curriculum", null)
-                        .WithMany("Educacao")
-                        .HasForeignKey("CurriculumId");
-                });
+                    b.HasOne("CurriculumWebAPI.Domain.Models.Educacao", "Educacao")
+                        .WithMany()
+                        .HasForeignKey("EducacaoId");
 
-            modelBuilder.Entity("MyPortfolio.CurriculumWebAPI.Models.Curriculum", b =>
-                {
                     b.Navigation("Educacao");
                 });
 #pragma warning restore 612, 618

@@ -1,6 +1,8 @@
 
 using CurriculumWebAPI.App.MapperConfig;
 using CurriculumWebAPI.DI;
+using CurriculumWebAPI.Infrastructure.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +13,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 BootStrap.Configure(builder.Services);
 
+
+builder.Services.AddDbContext<MyContext>(options =>
+            options.UseSqlite("Data Source=CurriculumDb.sqlite;"));
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
 
 var app = builder.Build();
 

@@ -6,6 +6,7 @@ using CurriculumWebAPI.Infrastructure.Data.Context;
 using CurriculumWebAPI.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace CurriculumWebAPI.DI
 {
@@ -13,7 +14,6 @@ namespace CurriculumWebAPI.DI
     {
         public static void Configure(IServiceCollection services)
         {
-            services.AddScoped(typeof(MyContext));
             services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
             services.AddTransient(typeof(CurriculumService));
             services.AddTransient(typeof(Mapper));

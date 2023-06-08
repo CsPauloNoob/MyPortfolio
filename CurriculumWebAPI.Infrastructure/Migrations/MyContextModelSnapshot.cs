@@ -61,19 +61,17 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Educacao", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AnoConclusao")
+                    b.Property<int?>("AnoConclusao")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Curso")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Instituicao")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

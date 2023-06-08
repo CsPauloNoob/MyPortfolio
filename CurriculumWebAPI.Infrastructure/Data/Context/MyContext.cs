@@ -11,14 +11,9 @@ namespace CurriculumWebAPI.Infrastructure.Data.Context
 {
     public class MyContext: DbContext
     {
-        public MyContext() : base()
+        public MyContext(DbContextOptions<MyContext> options) : base(options)
         {
-
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder builder)
-        {
-            builder.UseSqlite("Data Source=CurriculumDb.sqlite;");
+            
         }
 
         public DbSet<Curriculum> Curriculum { get; set; }
