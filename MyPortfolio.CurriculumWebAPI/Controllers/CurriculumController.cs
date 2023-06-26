@@ -31,8 +31,7 @@ namespace CurriculumWebAPI.App.Controllers
         }
 
         [HttpPost]
-        [Route("new")]
-        public async Task<IActionResult> AddCurriculum(CurriculumViewModel curriculum)
+        public async Task<IActionResult> AddCurriculum(CurriculumInputModel curriculum)
         {
             var mapped = _mapper.Map<Curriculum>(curriculum);
 
@@ -44,5 +43,6 @@ namespace CurriculumWebAPI.App.Controllers
             else
                 return BadRequest(result);
         }
+
     }
 }

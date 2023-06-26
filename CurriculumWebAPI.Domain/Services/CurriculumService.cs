@@ -30,8 +30,8 @@ namespace CurriculumWebAPI.Domain.Services
                 return false;
 
             var result = _repository.AddNew(curriculum);
-            
-            if(result)
+
+            if (result)
                 return true;
 
             return false;
