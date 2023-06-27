@@ -18,8 +18,6 @@ namespace CurriculumWebAPI.Domain.Services
 
         public async Task<bool> AddFormacao(Formacao formacao)
         {
-            //if(_repository)
-
             return true;
         }
 

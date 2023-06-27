@@ -7,7 +7,7 @@ namespace CurriculumWebAPI.Domain.Models
     
     public class Formacao
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public string Instituicao { get; set; }
 

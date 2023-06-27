@@ -1,10 +1,12 @@
 ﻿using CurriculumWebAPI.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
 
 namespace CurriculumWebAPI.Infrastructure.Data.Context
 {
-    public class MyContext: DbContext
+    public class MyContext: IdentityDbContext
     {
         public MyContext(DbContextOptions<MyContext> options) : base(options)
         {   }
@@ -12,6 +14,8 @@ namespace CurriculumWebAPI.Infrastructure.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Curriculum>()
                 .HasMany(f => f.Formacao)
                 .WithOne(c => c.Curriculum)
@@ -19,6 +23,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Context
         }
 
 
+        public DbSet<ApplicationUser> users { get; set; }
         public DbSet<Curriculum> Curriculum { get; set; }
         public DbSet<Formacao> Formacao { get; set; }
     }
