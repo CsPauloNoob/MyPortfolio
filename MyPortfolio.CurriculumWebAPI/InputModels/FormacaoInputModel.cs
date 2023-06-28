@@ -1,4 +1,4 @@
-﻿namespace CurriculumWebAPI.App.ViewModel
+﻿namespace CurriculumWebAPI.App.InputModels
 {
     public class FormacaoInputModel
     {

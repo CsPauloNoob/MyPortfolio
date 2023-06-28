@@ -1,4 +1,5 @@
-﻿using CurriculumWebAPI.Domain.Models;
+﻿using CurriculumWebAPI.Domain.Interfaces;
+using CurriculumWebAPI.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CurriculumWebAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230627043704_NewDB")]
+    [Migration("20230628002505_NewDB")]
     partial class NewDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

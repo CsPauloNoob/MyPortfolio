@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CurriculumWebAPI.App.ViewModel;
+using CurriculumWebAPI.App.InputModels;
 using CurriculumWebAPI.Domain.Models;
 
 namespace CurriculumWebAPI.App.MapperConfig
@@ -11,6 +11,8 @@ namespace CurriculumWebAPI.App.MapperConfig
             CreateMap<Curriculum, CurriculumInputModel>()
                 .ForMember(formacao => formacao.Formação, opts
                 => opts.MapFrom(educ => educ.Formacao)).ReverseMap();
+
+            CreateMap<User, UserInputModel>();
         }
     }
 }

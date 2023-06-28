@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CurriculumWebAPI.Domain
+namespace CurriculumWebAPI.Domain.Interfaces
 {
     public interface IRepository<T> where T : class
     {

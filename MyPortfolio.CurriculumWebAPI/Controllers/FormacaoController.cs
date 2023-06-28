@@ -1,4 +1,5 @@
-﻿using CurriculumWebAPI.App.ViewModel;
+﻿using CurriculumWebAPI.App.InputModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurriculumWebAPI.App.Controllers
@@ -13,7 +14,7 @@ namespace CurriculumWebAPI.App.Controllers
         }
 
 
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddFormacao([FromBody] FormacaoInputModel educacaoViewModel)
         {

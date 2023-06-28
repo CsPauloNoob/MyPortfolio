@@ -1,4 +1,4 @@
-﻿using CurriculumWebAPI.Domain;
+﻿using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Infrastructure.Data.Context;
 using System;

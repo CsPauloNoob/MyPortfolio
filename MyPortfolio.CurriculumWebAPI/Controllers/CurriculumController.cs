@@ -1,5 +1,5 @@
 using AutoMapper;
-using CurriculumWebAPI.App.ViewModel;
+using CurriculumWebAPI.App.InputModels;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
