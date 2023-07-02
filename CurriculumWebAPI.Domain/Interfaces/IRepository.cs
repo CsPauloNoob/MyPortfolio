@@ -8,10 +8,10 @@ namespace CurriculumWebAPI.Domain.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        public bool AddNew(T entity);
-        public T GetById(int id);
+        public Task<bool> AddNew(T entity);
+        public Task<T> GetById(string id);
         public IEnumerable<T> GetAll();
-        public T Update(int id);
-        public bool Delete(int id);
+        public Task<T> Update(string id);
+        public Task<bool> Delete(string id);
     }
 }

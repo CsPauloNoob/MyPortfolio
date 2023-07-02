@@ -17,7 +17,7 @@ namespace CurriculumWebAPI.Domain.Models
 
         [ForeignKey("Curriculum")]
         [Required]
-        public Guid CurriculumId { get; set; }
+        public string CurriculumId { get; set; }
 
         public Curriculum Curriculum { get; set; }
     }

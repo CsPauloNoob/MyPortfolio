@@ -17,25 +17,17 @@ namespace CurriculumWebAPI.Domain.Services
             _repository = repository;
         }
 
-        public Curriculum GetById(int id)
+        public async Task<Curriculum> GetById(string id)
         {
-            var result = _repository.GetById(id);
+            var result = await _repository.GetById(id);
 
             return result;
         }
 
 
-        public bool Save(Curriculum curriculum)
+        public async Task<bool> Save(Curriculum curriculum)
         {
-            if(curriculum is null)
-                return false;
-
-            var result = _repository.AddNew(curriculum);
-
-            if (result)
-                return true;
-
-            return false;
+            return true;
         }
     }
 }

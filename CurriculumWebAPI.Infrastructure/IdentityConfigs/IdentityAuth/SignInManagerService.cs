@@ -19,7 +19,7 @@ namespace CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth
 
         public async Task<bool> AuthenticateAsync(string username, string password)
         {
-            
+            return true;
         }
     }
 }

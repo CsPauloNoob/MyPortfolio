@@ -16,6 +16,9 @@ namespace CurriculumWebAPI.Infrastructure.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<User>()
+                .HasKey(x => x.Id);
+
             modelBuilder.Entity<Curriculum>()
                 .HasMany(f => f.Formacao)
                 .WithOne(c => c.Curriculum)
@@ -23,7 +26,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Context
         }
 
 
-        public DbSet<ApplicationUser> users { get; set; }
+        public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<Curriculum> Curriculum { get; set; }
         public DbSet<Formacao> Formacao { get; set; }
     }

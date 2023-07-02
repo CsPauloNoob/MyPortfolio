@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddDbContext<MyContext>(options =>
-            options.UseSqlite(builder.Configuration["DefaultConnection"]));
+            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 BootStrap.Configure(builder);
 

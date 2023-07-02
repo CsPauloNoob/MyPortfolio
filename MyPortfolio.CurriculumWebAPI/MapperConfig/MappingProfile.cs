@@ -12,7 +12,8 @@ namespace CurriculumWebAPI.App.MapperConfig
                 .ForMember(formacao => formacao.Formação, opts
                 => opts.MapFrom(educ => educ.Formacao)).ReverseMap();
 
-            CreateMap<User, UserInputModel>();
+            CreateMap<UserInputModel, User>()
+                .ForMember(c => c.Curriculum, opt => opt.Ignore());
         }
     }
 }

@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using CurriculumWebAPI.Domain.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace CurriculumWebAPI.DI
 {
@@ -39,8 +40,13 @@ namespace CurriculumWebAPI.DI
         
 
             services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
+            services.AddScoped(typeof(IRepository<User>), typeof(UserRepository));
             services.AddTransient(typeof(CurriculumService));
             services.AddTransient(typeof(Mapper));
+            services.AddTransient(typeof(UserService));
+
+
+            SecretService.Secret = builder.Configuration.GetConnectionString("DefaultConnection");
         }
     }
 }

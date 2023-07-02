@@ -18,7 +18,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(string id)
         {
             Curriculum? entity = _context.Curriculum.Find(id);
 
@@ -43,7 +43,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
 
 
-        public Curriculum GetById(int id)
+        public async Task<Curriculum> GetById(string id)
         {
             var curriculo = _context.Curriculum.Find(id);
 
@@ -51,7 +51,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return curriculo;
         }
 
-        public bool AddNew(Curriculum curriculum)
+        public async Task<bool> AddNew(Curriculum curriculum)
         {
             _context.Curriculum.Add(curriculum);
             _context.SaveChangesAsync();
@@ -59,7 +59,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return true;
         }
 
-        public Curriculum Update(int id)
+        public async Task<Curriculum> Update(string id)
         {
             Curriculum? curriculo = _context.Curriculum.Find(id);
 

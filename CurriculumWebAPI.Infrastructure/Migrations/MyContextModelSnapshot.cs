@@ -19,8 +19,7 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Curriculum", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DataCriacao")
@@ -63,7 +62,8 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                     b.Property<int>("AnoConclusao")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("CurriculumId")
+                    b.Property<string>("CurriculumId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Curso")
@@ -79,6 +79,37 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                     b.HasIndex("CurriculumId");
 
                     b.ToTable("Formacao");
+                });
+
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CurriculumId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurriculumId");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -283,7 +314,7 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<Guid?>("CurriculumId")
+                    b.Property<string>("CurriculumId")
                         .HasColumnType("TEXT");
 
                     b.HasIndex("CurriculumId");
@@ -298,6 +329,15 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                         .HasForeignKey("CurriculumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Curriculum");
+                });
+
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.User", b =>
+                {
+                    b.HasOne("CurriculumWebAPI.Domain.Models.Curriculum", "Curriculum")
+                        .WithMany()
+                        .HasForeignKey("CurriculumId");
 
                     b.Navigation("Curriculum");
                 });

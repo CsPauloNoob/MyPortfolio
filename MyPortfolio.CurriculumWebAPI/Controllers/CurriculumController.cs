@@ -21,7 +21,7 @@ namespace CurriculumWebAPI.App.Controllers
         }
 
         [HttpGet]
-        public async Task<bool> GetCurriculumById(int id)
+        public async Task<bool> GetCurriculumById(string id)
         {
             _curriculoService.GetById(id);
 
@@ -35,7 +35,7 @@ namespace CurriculumWebAPI.App.Controllers
         {
             var mapped = _mapper.Map<Curriculum>(curriculum);
 
-            var result = _curriculoService.Save(mapped);
+            var result = await _curriculoService.Save(mapped);
 
             if(result)
                 return Ok();

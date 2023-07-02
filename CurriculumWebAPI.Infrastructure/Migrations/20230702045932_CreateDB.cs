@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CurriculumWebAPI.Infrastructure.Migrations
 {
-    public partial class NewDB : Migration
+    public partial class CreateDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,7 +27,7 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                 name: "Curriculum",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
                     Nome = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Telefone = table.Column<string>(type: "TEXT", nullable: true),
@@ -69,7 +69,7 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     Discriminator = table.Column<string>(type: "TEXT", nullable: false),
-                    CurriculumId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    CurriculumId = table.Column<string>(type: "TEXT", nullable: true),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -104,7 +104,7 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                     Instituicao = table.Column<string>(type: "TEXT", nullable: false),
                     Curso = table.Column<string>(type: "TEXT", nullable: false),
                     AnoConclusao = table.Column<int>(type: "INTEGER", nullable: false),
-                    CurriculumId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    CurriculumId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,6 +115,27 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                         principalTable: "Curriculum",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    UserName = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    CurriculumId = table.Column<string>(type: "TEXT", nullable: true),
+                    Role = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_User_Curriculum_CurriculumId",
+                        column: x => x.CurriculumId,
+                        principalTable: "Curriculum",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -248,6 +269,11 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                 name: "IX_Formacao_CurriculumId",
                 table: "Formacao",
                 column: "CurriculumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_CurriculumId",
+                table: "User",
+                column: "CurriculumId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -269,6 +295,9 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Formacao");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
