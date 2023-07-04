@@ -30,6 +30,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
                 Id = entity.Id,
                 UserName = entity.UserName,
                 Email = entity.Email,
+                NormalizedEmail = entity.Email.Normalize(),
                 PasswordHash = hashedPassword
             });
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CurriculumWebAPI.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace CurriculumWebAPI.Domain.Interfaces
 {
     public  interface ISignInManager
     {
-        Task<bool> AuthenticateAsync(string username, string password);
+        Task<Token> AuthenticateAsync(User user);
+        public Task<User> GetByEmail(string email);
     }
 }

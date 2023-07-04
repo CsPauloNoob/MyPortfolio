@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CurriculumWebAPI.Infrastructure.Migrations
 {
-    public partial class CreateDB : Migration
+    public partial class InitDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -68,7 +68,6 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
-                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
                     CurriculumId = table.Column<string>(type: "TEXT", nullable: true),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),

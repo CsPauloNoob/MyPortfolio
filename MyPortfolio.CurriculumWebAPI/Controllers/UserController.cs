@@ -37,5 +37,15 @@ namespace CurriculumWebAPI.App.Controllers
 
             return null;
         }
+
+        [HttpPost("{email}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TokenInputModel>> SignIn([FromBody] UserInputModel userInfo)
+        {
+            var token = _mapper.Map<TokenInputModel>
+                (await _userService.UserAuthenticate(_mapper.Map<User>(userInfo)));
+
+            return token;
+        }
     }
 }

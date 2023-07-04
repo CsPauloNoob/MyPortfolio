@@ -6,7 +6,7 @@ using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
 
 namespace CurriculumWebAPI.Infrastructure.Data.Context
 {
-    public class MyContext: IdentityDbContext
+    public class MyContext: IdentityDbContext<ApplicationUser>
     {
         public MyContext(DbContextOptions<MyContext> options) : base(options)
         {   }

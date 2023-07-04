@@ -14,6 +14,7 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using CurriculumWebAPI.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
+using CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth;
 
 namespace CurriculumWebAPI.DI
 {
@@ -41,6 +42,7 @@ namespace CurriculumWebAPI.DI
 
             services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
             services.AddScoped(typeof(IRepository<User>), typeof(UserRepository));
+            services.AddScoped(typeof(ISignInManager), typeof(AuthService));
             services.AddTransient(typeof(CurriculumService));
             services.AddTransient(typeof(Mapper));
             services.AddTransient(typeof(UserService));
