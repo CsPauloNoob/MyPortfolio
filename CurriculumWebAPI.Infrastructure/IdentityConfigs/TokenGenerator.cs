@@ -1,6 +1,6 @@
 ﻿using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Domain.Services;
-using Microsoft.AspNetCore.DataProtection;
+using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,11 +11,36 @@ namespace CurriculumWebAPI.Infrastructure.IdentityConfigs
     public class TokenGenerator
     {
 
-        private Token BuildToken(User userInfo)
+        public async Task<Token> BuildToken(ApplicationUser user)
         {
 
-            var claims = new[]
+            var authClaims = new List<Claim>
             {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, user.Email.ToString())
+            };
+
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretService.Secret));
+            var credentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
+
+
+            var token = new JwtSecurityToken(
+            expires: DateTime.Now.AddHours(3),
+            claims: authClaims,
+            signingCredentials: credentials
+            );
+
+            return new Token()
+            {
+                MyToken = new JwtSecurityTokenHandler()
+                .WriteToken(token),
+                Expiration = token.ValidTo
+            };
+
+            /*var claims = new[]
+{
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
@@ -37,7 +62,7 @@ namespace CurriculumWebAPI.Infrastructure.IdentityConfigs
             {
                 MyToken = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
-            };
+            };*/
         }
     }
 }

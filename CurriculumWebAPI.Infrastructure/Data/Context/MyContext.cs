@@ -6,18 +6,23 @@ using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
 
 namespace CurriculumWebAPI.Infrastructure.Data.Context
 {
-    public class MyContext: IdentityDbContext<ApplicationUser>
+    public class MyContext : IdentityDbContext<ApplicationUser>
     {
         public MyContext(DbContextOptions<MyContext> options) : base(options)
-        {   }
+        { }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>()
-                .HasKey(x => x.Id);
+            modelBuilder.Entity<ApplicationUser>()
+                .ToTable("AspNetUsers").HasKey(k => k.Id);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasIndex(u => u.NormalizedEmail)
+                .HasDatabaseName("EmailIndex")
+                .IsUnique();
 
             modelBuilder.Entity<Curriculum>()
                 .HasMany(f => f.Formacao)

@@ -20,7 +20,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public async Task<bool> AddNew(User entity)
+        public async Task<int> AddNew(User entity)
         {
             var passwordHasher = new PasswordHasher<ApplicationUser>();
             var hashedPassword = passwordHasher.HashPassword(null, entity.Password);
@@ -29,15 +29,15 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             {
                 Id = entity.Id,
                 UserName = entity.UserName,
+                NormalizedUserName = entity.UserName.ToUpper().Normalize(),
                 Email = entity.Email,
-                NormalizedEmail = entity.Email.Normalize(),
+                NormalizedEmail = entity.Email.ToUpper().Normalize(),
                 PasswordHash = hashedPassword
             });
 
-            await _context.SaveChangesAsync();
-
-            return true;
+            return await _context.SaveChangesAsync();
         }
+
 
         public Task<bool> Delete(string id)
         {

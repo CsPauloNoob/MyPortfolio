@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Builder;
 using CurriculumWebAPI.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth;
+using CurriculumWebAPI.Infrastructure.IdentityConfigs;
 
 namespace CurriculumWebAPI.DI
 {
@@ -24,7 +25,8 @@ namespace CurriculumWebAPI.DI
         {
             var services = builder.Services;
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => 
+                options.User.RequireUniqueEmail = true)
                 .AddEntityFrameworkStores<MyContext>()
                 .AddDefaultTokenProviders();
 
@@ -42,7 +44,8 @@ namespace CurriculumWebAPI.DI
 
             services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
             services.AddScoped(typeof(IRepository<User>), typeof(UserRepository));
-            services.AddScoped(typeof(ISignInManager), typeof(AuthService));
+            services.AddScoped(typeof(IUserIdentity), typeof(UserIdentity));
+            services.AddSingleton(typeof(TokenGenerator));
             services.AddTransient(typeof(CurriculumService));
             services.AddTransient(typeof(Mapper));
             services.AddTransient(typeof(UserService));

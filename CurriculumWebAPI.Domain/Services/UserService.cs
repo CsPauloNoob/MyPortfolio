@@ -1,4 +1,5 @@
-﻿using CurriculumWebAPI.Domain.Interfaces;
+﻿using CurriculumWebAPI.Domain.Exceptions;
+using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,9 @@ namespace CurriculumWebAPI.Domain.Services
     public class UserService
     {
         private readonly IRepository<User> _reposity;
-        private readonly ISignInManager _signInManager;
+        private readonly IUserIdentity _signInManager;
 
-        public UserService(IRepository<User> repository, ISignInManager signInManager)
+        public UserService(IRepository<User> repository, IUserIdentity signInManager)
         {
             _reposity = repository;
             _signInManager = signInManager;
@@ -24,11 +25,11 @@ namespace CurriculumWebAPI.Domain.Services
         {
             try
             {
-                var userInDb = _signInManager.GetByEmail(userToAuth.UserName);
+                var userInDb = await _signInManager.UserExists(userToAuth.Email);
 
-                if (userInDb is null) return null;
+                if (!userInDb) return new Token();
 
-                var token = await _signInManager.AuthenticateAsync(userToAuth);
+                var token = await _signInManager.SignIn(userToAuth);
 
                 return token;
             }
@@ -40,16 +41,22 @@ namespace CurriculumWebAPI.Domain.Services
         }
 
 
-        public async Task<bool> CreateUser(User User)
+        public async Task<Token> CreateUser(User User)
         {
+
             var exists = await _reposity.GetById(User.Id);
 
-            if(exists is null)
+            if (exists is null)
             {
-                return await _reposity.AddNew(User);
+                var result = await _reposity.AddNew(User);
+
+                if (result < 0)
+                    throw new SaveFailedException("Falha ao salvar as alterações no banco de dados.");
+
+                else return await _signInManager.AuthNewUSer(User);
             }
 
-            return false;
+            return new Token();
         }
     }
 }

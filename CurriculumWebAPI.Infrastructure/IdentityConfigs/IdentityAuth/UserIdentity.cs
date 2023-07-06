@@ -2,6 +2,7 @@
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Domain.Services;
 using CurriculumWebAPI.Infrastructure.Data.Context;
+using CurriculumWebAPI.Infrastructure.IdentityConfigs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,19 +12,23 @@ using System.Text;
 
 namespace CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth
 {
-    public class AuthService : ISignInManager
+    public class UserIdentity : IUserIdentity
     {
         private readonly MyContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly TokenGenerator _tokenGenerator;
 
-        public AuthService(SignInManager<ApplicationUser> signInManager, 
-            UserManager<ApplicationUser> userManager ,MyContext context)
+        public UserIdentity(SignInManager<ApplicationUser> signInManager, 
+            UserManager<ApplicationUser> userManager, 
+            MyContext context, TokenGenerator tokenGenerator)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenGenerator = tokenGenerator;
         }
+
 
         /// <summary>
         /// Autentica e retorna um token caso o user exista
@@ -31,7 +36,7 @@ namespace CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth
         /// <param name="user"></param>
         /// <returns></returns>
         /// <exception cref="AuthenticationException"></exception>
-        public async Task<Token> AuthenticateAsync(User user)
+        public async Task<Token> SignIn(User user)
         {
             var appUser = await _userManager.FindByEmailAsync(user.Email);
             var signInResult = await _signInManager.CheckPasswordSignInAsync(appUser, user.Password, false);
@@ -40,37 +45,26 @@ namespace CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth
             {
                 var userRoles = await _userManager.FindByEmailAsync(user.Email);
 
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, appUser.UserName),
-                    new Claim(ClaimTypes.NameIdentifier, appUser.Id),
-                    new Claim(ClaimTypes.Email, appUser.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, appUser.Email.ToString())
-                };
-
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretService.Secret));
-
-                var token = new JwtSecurityToken(
-                expires: DateTime.Now.AddHours(3),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                );
-
-                return new Token() { MyToken = new JwtSecurityTokenHandler()
-                    .WriteToken(token), Expiration = token.ValidTo };
+                return await _tokenGenerator.BuildToken(appUser);
             }
 
             else throw new AuthenticationException("Falha na autenticação. Credenciais inválidas.");
         }
 
-
-        public async Task<User> GetByEmail(string userName)
+        public async Task<Token> AuthNewUSer(User user)
         {
-            var user = await _userManager.FindByNameAsync(userName);
+            var appUser = await _userManager.FindByEmailAsync(user.Email);
 
-            if (user is null) return null;
+            return await _tokenGenerator.BuildToken(appUser);
+        }
 
-            return new User();
+        public async Task<bool> UserExists(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null) return false;
+
+            return true;
         }
     }
 }

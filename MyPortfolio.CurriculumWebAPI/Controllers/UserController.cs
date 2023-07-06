@@ -31,19 +31,20 @@ namespace CurriculumWebAPI.App.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<TokenInputModel>> CreateUser([FromBody] UserInputModel userInfo)
+        public async Task<ActionResult<Token>> CreateUser([FromBody] UserInputModel userInfo)
         {
-            await _userService.CreateUser(_mapper.Map<User>(userInfo));
+            var token = await _userService.CreateUser(_mapper.Map<User>(userInfo));
 
-            return null;
+            return token;
         }
 
-        [HttpPost("{email}")]
+        [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<TokenInputModel>> SignIn([FromBody] UserInputModel userInfo)
+        public async Task<ActionResult<Token>> SignIn([FromBody] UserInputModel userInfo)
         {
-            var token = _mapper.Map<TokenInputModel>
-                (await _userService.UserAuthenticate(_mapper.Map<User>(userInfo)));
+            var token = await _userService.UserAuthenticate(_mapper.Map<User>(userInfo));
+
+            if (token.MyToken is null) return NotFound("Usuário não encontrado");
 
             return token;
         }

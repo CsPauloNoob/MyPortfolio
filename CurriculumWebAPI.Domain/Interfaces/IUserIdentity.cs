@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace CurriculumWebAPI.Domain.Interfaces
 {
-    public  interface ISignInManager
+    public  interface IUserIdentity
     {
-        Task<Token> AuthenticateAsync(User user);
-        public Task<User> GetByEmail(string email);
+        Task<Token> SignIn(User user);
+        public Task<Token> AuthNewUSer(User user);
+        public Task<bool> UserExists(string email);
     }
 }

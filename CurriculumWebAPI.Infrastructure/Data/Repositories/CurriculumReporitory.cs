@@ -51,12 +51,10 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return curriculo;
         }
 
-        public async Task<bool> AddNew(Curriculum curriculum)
+        public async Task<int> AddNew(Curriculum curriculum)
         {
             _context.Curriculum.Add(curriculum);
-            _context.SaveChangesAsync();
-
-            return true;
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<Curriculum> Update(string id)
