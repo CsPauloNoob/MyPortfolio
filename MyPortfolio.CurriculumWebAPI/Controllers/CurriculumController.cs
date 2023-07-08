@@ -2,6 +2,7 @@ using AutoMapper;
 using CurriculumWebAPI.App.InputModels;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurriculumWebAPI.App.Controllers
@@ -20,16 +21,7 @@ namespace CurriculumWebAPI.App.Controllers
             _curriculoService = curriculumService;
         }
 
-        [HttpGet]
-        public async Task<bool> GetCurriculumById(string id)
-        {
-            _curriculoService.GetById(id);
-
-
-
-            return true;
-        }
-
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
         public async Task<IActionResult> AddCurriculum(CurriculumInputModel curriculum)
         {
@@ -43,6 +35,5 @@ namespace CurriculumWebAPI.App.Controllers
             else
                 return BadRequest(result);
         }
-
     }
 }

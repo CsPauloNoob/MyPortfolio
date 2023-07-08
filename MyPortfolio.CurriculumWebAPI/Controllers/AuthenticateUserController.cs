@@ -15,13 +15,13 @@ namespace CurriculumWebAPI.App.Controllers
 
     [ApiController]
     [Route("V1/[controller]")]
-    public class UserController : ControllerBase
+    public class AuthenticateUserController : ControllerBase
     {
         private readonly Mapper _mapper;
         private readonly UserService _userService;
         private readonly IConfiguration _configuration;
 
-        public UserController(UserService userService, Mapper mapper)
+        public AuthenticateUserController(UserService userService, Mapper mapper)
         {
             _mapper = mapper;
             _userService = userService;
@@ -31,22 +31,32 @@ namespace CurriculumWebAPI.App.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<Token>> CreateUser([FromBody] UserInputModel userInfo)
+        public async Task<ActionResult<dynamic>> CreateUser([FromBody] UserInputModel userInfo)
         {
+            userInfo.Id = Guid.NewGuid();
+
             var token = await _userService.CreateUser(_mapper.Map<User>(userInfo));
 
-            return token;
+            return CreatedAtAction(nameof(CreateUser),new
+            {
+                authToken = token.MyToken,
+                user = userInfo
+            });
         }
+
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<Token>> SignIn([FromBody] UserInputModel userInfo)
+        public async Task<ActionResult<dynamic>> SignIn([FromBody] UserInputModel userInfo)
         {
             var token = await _userService.UserAuthenticate(_mapper.Map<User>(userInfo));
 
             if (token.MyToken is null) return NotFound("Usuário não encontrado");
 
-            return token;
+            return Ok(new
+            {
+                authToken = token.MyToken,
+            });
         }
     }
 }

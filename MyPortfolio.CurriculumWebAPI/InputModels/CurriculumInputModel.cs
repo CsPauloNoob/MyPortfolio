@@ -10,7 +10,6 @@
         public string? ExperienciaProfissional { get; set; }
         public string? Habilidades { get; set; }
         public string? SobreMim { get; set; }
-        public string? Formação { get; set; }
         public DateTime DataCriacao { get; set; }
     }
 }

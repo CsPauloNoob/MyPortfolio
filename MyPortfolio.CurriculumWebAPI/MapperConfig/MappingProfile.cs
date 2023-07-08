@@ -8,9 +8,7 @@ namespace CurriculumWebAPI.App.MapperConfig
     {
         public MappingProfile()
         {
-            CreateMap<Curriculum, CurriculumInputModel>()
-                .ForMember(formacao => formacao.Formação, opts
-                => opts.MapFrom(educ => educ.Formacao)).ReverseMap();
+            CreateMap<Curriculum, CurriculumInputModel>();
 
             CreateMap<UserInputModel, User>()
                 .ForMember(c => c.Curriculum, opt => opt.Ignore());

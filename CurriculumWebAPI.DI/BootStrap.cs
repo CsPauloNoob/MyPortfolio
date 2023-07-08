@@ -24,6 +24,7 @@ namespace CurriculumWebAPI.DI
         public static void Configure(WebApplicationBuilder builder)
         {
             var services = builder.Services;
+            SecretService.Secret = builder.Configuration.GetValue<string>("JWT:Key");
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options => 
                 options.User.RequireUniqueEmail = true)
@@ -37,7 +38,7 @@ namespace CurriculumWebAPI.DI
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretService.Secret)),
                     ClockSkew = TimeSpan.Zero
                 });
         
@@ -49,9 +50,6 @@ namespace CurriculumWebAPI.DI
             services.AddTransient(typeof(CurriculumService));
             services.AddTransient(typeof(Mapper));
             services.AddTransient(typeof(UserService));
-
-
-            SecretService.Secret = builder.Configuration.GetConnectionString("DefaultConnection");
         }
     }
 }
