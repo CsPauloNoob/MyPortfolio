@@ -4,8 +4,6 @@ using CurriculumWebAPI.Domain.Services;
 using CurriculumWebAPI.Infrastructure.Data.Context;
 using CurriculumWebAPI.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,7 +13,8 @@ using Microsoft.AspNetCore.Builder;
 using CurriculumWebAPI.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth;
-using CurriculumWebAPI.Infrastructure.IdentityConfigs;
+using CurriculumWebAPI.Infrastructure.IdentityConfigs.IdentityAuth;
+using CurriculumWebAPI.Infrastructure.PDF;
 
 namespace CurriculumWebAPI.DI
 {
@@ -41,15 +40,24 @@ namespace CurriculumWebAPI.DI
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretService.Secret)),
                     ClockSkew = TimeSpan.Zero
                 });
-        
+
+            #region DI region
 
             services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
             services.AddScoped(typeof(IRepository<User>), typeof(UserRepository));
             services.AddScoped(typeof(IUserIdentity), typeof(UserIdentity));
+            services.AddScoped(typeof(IPdfGenerator), typeof(PdfGenerator));
+
             services.AddSingleton(typeof(TokenGenerator));
-            services.AddTransient(typeof(CurriculumService));
-            services.AddTransient(typeof(Mapper));
+            services.AddSingleton(typeof(PdfGenerator));
             services.AddTransient(typeof(UserService));
+
+            services.AddTransient(typeof(CurriculumService));
+            services.AddTransient(typeof(PdfService));
+
+            services.AddTransient(typeof(Mapper));
+
+            #endregion
         }
     }
 }

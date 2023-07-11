@@ -12,12 +12,14 @@ namespace CurriculumWebAPI.App.Controllers
     public class CurriculumController : ControllerBase
     {
         private readonly Mapper _mapper;
+        private readonly PdfService _pdfServices;
         private readonly CurriculumService _curriculoService;
 
 
-        public CurriculumController(CurriculumService curriculumService, Mapper mapper)
+        public CurriculumController(CurriculumService curriculumService, PdfService pdfServices ,Mapper mapper)
         {
             _mapper = mapper;
+            _pdfServices = pdfServices;
             _curriculoService = curriculumService;
         }
 
@@ -34,6 +36,13 @@ namespace CurriculumWebAPI.App.Controllers
 
             else
                 return BadRequest(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("owner")]
+        public async Task<string> GetOwner()
+        {
+            return await  _pdfServices.GetPauloCurriculumPdf();
         }
     }
 }

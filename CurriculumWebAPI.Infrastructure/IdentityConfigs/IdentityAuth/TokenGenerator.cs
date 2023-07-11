@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace CurriculumWebAPI.Infrastructure.IdentityConfigs
+namespace CurriculumWebAPI.Infrastructure.IdentityConfigs.IdentityAuth
 {
     public class TokenGenerator
     {
