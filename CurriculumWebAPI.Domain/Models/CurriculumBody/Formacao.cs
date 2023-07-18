@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
-namespace CurriculumWebAPI.Domain.Models
+namespace CurriculumWebAPI.Domain.Models.CurriculumBody
 {
-    
+
     public class Formacao
     {
         public int Id { get; set; }

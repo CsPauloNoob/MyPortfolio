@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection.Metadata;
+using CurriculumWebAPI.Domain.Models.CurriculumBody;
 
 namespace CurriculumWebAPI.Domain.Models
 {
@@ -7,9 +8,8 @@ namespace CurriculumWebAPI.Domain.Models
     {
         public string Id { get; set; }
         public string Nome { get; set; }
-        public string Email { get; set; }
-        public string? Telefone { get; set; }
-        public string? Endereco { get; set; }
+        public string PerfilProgramador { get; set; }
+        public Contato Contato { get; set; }
         public string? ExperienciaProfissional { get; set; }
         public string? Habilidades { get; set; }
         public string? SobreMim { get; set; }

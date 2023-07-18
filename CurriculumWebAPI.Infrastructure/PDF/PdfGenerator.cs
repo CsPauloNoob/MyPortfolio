@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CurriculumWebAPI.Domain.Interfaces;
+using iTextSharp.text.pdf.parser;
 
 namespace CurriculumWebAPI.Infrastructure.PDF
 {
@@ -14,7 +15,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
     {
         public async Task<string> Create(Curriculum curriculum)
         {
-
+            
             string pdfName = Guid.NewGuid().ToString()+".pdf";
             string pdfFile = DirectoryManager.PdfPath(pdfName);
 
@@ -26,15 +27,9 @@ namespace CurriculumWebAPI.Infrastructure.PDF
             // Abrir o documento para escrita
             doc.Open();
 
-            // Adicionar um parágrafo com estilo
-            Font normalFont = FontFactory.GetFont(FontFactory.HELVETICA, 12);
-            Font boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12);
-            Font underlinedFont = FontFactory.GetFont(FontFactory.HELVETICA, 12, Font.UNDERLINE);
+            CurriculumTop(doc, curriculum);
 
-            doc.Add(new Paragraph("Texto normal", normalFont));
-            doc.Add(new Paragraph("Texto em negrito", boldFont));
-            doc.Add(new Paragraph("Texto sublinhado", underlinedFont));
-
+            /*
             // Adicionar linhas personalizadas
             PdfContentByte contentByte = writer.DirectContent;
             contentByte.SetLineWidth(1); // Espessura da linha
@@ -43,10 +38,29 @@ namespace CurriculumWebAPI.Infrastructure.PDF
             contentByte.LineTo(550, 700); // Posição final da linha
             contentByte.Stroke(); // Desenhar a linha
 
-            // Fechar o documento
+            // Fechar o documento*/
             doc.Close();
 
             return pdfFile;
+        }
+
+        void CurriculumTop(Document doc, Curriculum curriculum)
+        {
+            //Fontes
+            Font nameFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 24);
+            Font secondTitle = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18);
+            Font infoFontUnderLine = FontFactory.GetFont(FontFactory.HELVETICA, 12, Font.UNDERLINE);
+            Font infoFont = FontFactory.GetFont(FontFactory.HELVETICA, 12);
+
+
+            doc.Add(new Paragraph(curriculum.Nome, nameFont));
+            doc.Add(new Paragraph("Desenvolvedor Back-End Web .NET", infoFontUnderLine));
+
+            doc.Add(new Paragraph("\n"));
+
+            doc.Add(new Paragraph("Contato", secondTitle));
+            doc.Add(new Paragraph(curriculum.Email, infoFont));
+            
         }
     }
 }
