@@ -27,7 +27,12 @@ namespace CurriculumWebAPI.Domain.Services
 
         public async Task<bool> Save(Curriculum curriculum)
         {
-            return true;
+            curriculum.Id = Guid.NewGuid().ToString();
+
+            if (await _repository.AddNew(curriculum) > 0)
+                return true;
+
+            else return false;
         }
     }
 }

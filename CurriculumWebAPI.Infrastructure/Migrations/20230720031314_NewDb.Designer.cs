@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CurriculumWebAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230704043011_InitDB")]
-    partial class InitDB
+    [Migration("20230720031314_NewDb")]
+    partial class NewDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,38 +24,102 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("ContatoId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Endereco")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ExperienciaProfissional")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Habilidades")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SobreMim")
+                    b.Property<string>("PerfilProgramador")
+                        .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Telefone")
+                    b.Property<string>("SobreMim")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ContatoId");
+
                     b.ToTable("Curriculum");
                 });
 
-            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Formacao", b =>
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Contato", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Contato");
+                });
+
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Cursos_Extras", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CurriculumId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome_Curso")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Organizacao")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurriculumId");
+
+                    b.ToTable("Cursos_Extras");
+                });
+
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Experiencia_Profissional", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CurriculumId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Funcao")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome_Organizacao")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurriculumId");
+
+                    b.ToTable("Experiencias");
+                });
+
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Formacao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,27 +147,21 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                     b.ToTable("Formacao");
                 });
 
-            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.User", b =>
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Habilidades", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CurriculumId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("Descricao")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserName")
+                    b.Property<string>("Nome_Habilidade")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -111,7 +169,7 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
                     b.HasIndex("CurriculumId");
 
-                    b.ToTable("User");
+                    b.ToTable("Habilidades");
                 });
 
             modelBuilder.Entity("CurriculumWebAPI.Infrastructure.IdentityConfiguration.ApplicationUser", b =>
@@ -311,7 +369,107 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Formacao", b =>
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Curriculum", b =>
+                {
+                    b.HasOne("CurriculumWebAPI.Domain.Models.CurriculumBody.Contato", "Contato")
+                        .WithMany()
+                        .HasForeignKey("ContatoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contato");
+                });
+
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Contato", b =>
+                {
+                    b.OwnsOne("CurriculumWebAPI.Domain.Models.ComplexTypes.Address", "Endereco", b1 =>
+                        {
+                            b1.Property<int>("ContatoId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Bairro")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Cidade")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Estado")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("NumeroCasa")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Rua")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("ContatoId");
+
+                            b1.ToTable("Contato");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ContatoId");
+                        });
+
+                    b.OwnsOne("CurriculumWebAPI.Domain.Models.ComplexTypes.PhoneNumber", "Telefone", b1 =>
+                        {
+                            b1.Property<int>("ContatoId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Codigo")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("DDD")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Numero")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("ContatoId");
+
+                            b1.ToTable("Contato");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ContatoId");
+                        });
+
+                    b.Navigation("Endereco")
+                        .IsRequired();
+
+                    b.Navigation("Telefone")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Cursos_Extras", b =>
+                {
+                    b.HasOne("CurriculumWebAPI.Domain.Models.Curriculum", "Curriculum")
+                        .WithMany("Cursos")
+                        .HasForeignKey("CurriculumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Curriculum");
+                });
+
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Experiencia_Profissional", b =>
+                {
+                    b.HasOne("CurriculumWebAPI.Domain.Models.Curriculum", "Curriculum")
+                        .WithMany("Experiencia_Profissional")
+                        .HasForeignKey("CurriculumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Curriculum");
+                });
+
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Formacao", b =>
                 {
                     b.HasOne("CurriculumWebAPI.Domain.Models.Curriculum", "Curriculum")
                         .WithMany("Formacao")
@@ -322,11 +480,13 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                     b.Navigation("Curriculum");
                 });
 
-            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.User", b =>
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Habilidades", b =>
                 {
                     b.HasOne("CurriculumWebAPI.Domain.Models.Curriculum", "Curriculum")
-                        .WithMany()
-                        .HasForeignKey("CurriculumId");
+                        .WithMany("Habilidade")
+                        .HasForeignKey("CurriculumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Curriculum");
                 });
@@ -393,7 +553,13 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Curriculum", b =>
                 {
+                    b.Navigation("Cursos");
+
+                    b.Navigation("Experiencia_Profissional");
+
                     b.Navigation("Formacao");
+
+                    b.Navigation("Habilidade");
                 });
 #pragma warning restore 612, 618
         }

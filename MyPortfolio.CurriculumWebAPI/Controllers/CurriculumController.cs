@@ -27,10 +27,11 @@ namespace CurriculumWebAPI.App.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCurriculum(CurriculumInputModel curriculum)
         {
+            
             var mapped = _mapper.Map<Curriculum>(curriculum);
 
             var result = await _curriculoService.Save(mapped);
-
+            
             if(result)
                 return Ok();
 

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace CurriculumWebAPI.Domain.Models.ComplexTypes
 {
-    public class Adress
+    [Owned]
+    public class Address
     {
         public string Rua { get; set; }
         public string Bairro { get; set; }

@@ -59,7 +59,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
             doc.Add(new Paragraph("\n"));
 
             doc.Add(new Paragraph("Contato", secondTitle));
-            doc.Add(new Paragraph(curriculum.Email, infoFont));
+            //doc.Add(new Paragraph(curriculum.Email, infoFont));
             
         }
     }

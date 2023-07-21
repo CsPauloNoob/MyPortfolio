@@ -1,15 +1,18 @@
-﻿namespace CurriculumWebAPI.App.InputModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CurriculumWebAPI.App.InputModels
 {
     public class CurriculumInputModel
     {
-        public Guid Id { get; set; }
+
+        [MaxLength(60)]
         public string Nome { get; set; }
-        public string Email { get; set; }
-        public string? Telefone { get; set; }
-        public string? Endereco { get; set; }
-        public string? ExperienciaProfissional { get; set; }
-        public string? Habilidades { get; set; }
-        public string? SobreMim { get; set; }
+
+        [MaxLength(50)]
+        public string PerfilProgramador { get; set; }
+        [MaxLength(250)]
+        public string SobreMim { get; set; }
+
         public DateTime DataCriacao { get; set; }
     }
 }

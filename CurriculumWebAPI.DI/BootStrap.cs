@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth;
 using CurriculumWebAPI.Infrastructure.IdentityConfigs.IdentityAuth;
 using CurriculumWebAPI.Infrastructure.PDF;
+using CurriculumWebAPI.Domain.Models.CurriculumBody;
 
 namespace CurriculumWebAPI.DI
 {
@@ -25,8 +26,7 @@ namespace CurriculumWebAPI.DI
             var services = builder.Services;
             SecretService.Secret = builder.Configuration.GetValue<string>("JWT:Key");
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options => 
-                options.User.RequireUniqueEmail = true)
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<MyContext>()
                 .AddDefaultTokenProviders();
 
@@ -45,6 +45,7 @@ namespace CurriculumWebAPI.DI
 
             services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
             services.AddScoped(typeof(IRepository<User>), typeof(UserRepository));
+            services.AddScoped(typeof(IRepository<Contato>), typeof(ContatoRepository));
             services.AddScoped(typeof(IUserIdentity), typeof(UserIdentity));
             services.AddScoped(typeof(IPdfGenerator), typeof(PdfGenerator));
 
@@ -54,6 +55,7 @@ namespace CurriculumWebAPI.DI
 
             services.AddTransient(typeof(CurriculumService));
             services.AddTransient(typeof(PdfService));
+            services.AddTransient(typeof(ContatoService));
 
             services.AddTransient(typeof(Mapper));
 
