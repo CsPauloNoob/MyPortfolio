@@ -52,10 +52,8 @@ namespace CurriculumWebAPI.DI
             services.AddSingleton(typeof(TokenGenerator));
             services.AddSingleton(typeof(PdfGenerator));
             services.AddTransient(typeof(UserService));
-
             services.AddTransient(typeof(CurriculumService));
             services.AddTransient(typeof(PdfService));
-            services.AddTransient(typeof(ContatoService));
 
             services.AddTransient(typeof(Mapper));
 

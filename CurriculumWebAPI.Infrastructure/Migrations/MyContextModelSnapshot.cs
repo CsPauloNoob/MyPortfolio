@@ -22,9 +22,6 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ContatoId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("TEXT");
 
@@ -43,8 +40,6 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContatoId");
-
                     b.ToTable("Curriculum");
                 });
 
@@ -54,11 +49,18 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("CurriculumId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CurriculumId")
+                        .IsUnique();
 
                     b.ToTable("Contato");
                 });
@@ -367,19 +369,14 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Curriculum", b =>
+            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Contato", b =>
                 {
-                    b.HasOne("CurriculumWebAPI.Domain.Models.CurriculumBody.Contato", "Contato")
-                        .WithMany()
-                        .HasForeignKey("ContatoId")
+                    b.HasOne("CurriculumWebAPI.Domain.Models.Curriculum", null)
+                        .WithOne("Contato")
+                        .HasForeignKey("CurriculumWebAPI.Domain.Models.CurriculumBody.Contato", "CurriculumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contato");
-                });
-
-            modelBuilder.Entity("CurriculumWebAPI.Domain.Models.CurriculumBody.Contato", b =>
-                {
                     b.OwnsOne("CurriculumWebAPI.Domain.Models.ComplexTypes.Address", "Endereco", b1 =>
                         {
                             b1.Property<int>("ContatoId")
@@ -551,6 +548,9 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("CurriculumWebAPI.Domain.Models.Curriculum", b =>
                 {
+                    b.Navigation("Contato")
+                        .IsRequired();
+
                     b.Navigation("Cursos");
 
                     b.Navigation("Experiencia_Profissional");

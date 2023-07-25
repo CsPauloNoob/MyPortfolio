@@ -1,9 +1,12 @@
 using AutoMapper;
 using CurriculumWebAPI.App.InputModels;
 using CurriculumWebAPI.Domain.Models;
+using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using CurriculumWebAPI.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace CurriculumWebAPI.App.Controllers
 {
@@ -14,30 +17,73 @@ namespace CurriculumWebAPI.App.Controllers
         private readonly Mapper _mapper;
         private readonly PdfService _pdfServices;
         private readonly CurriculumService _curriculoService;
+        private readonly UserService _userService;
 
 
-        public CurriculumController(CurriculumService curriculumService, PdfService pdfServices ,Mapper mapper)
+        public CurriculumController(CurriculumService curriculumService, 
+            PdfService pdfServices ,Mapper mapper, UserService userService)
         {
             _mapper = mapper;
             _pdfServices = pdfServices;
             _curriculoService = curriculumService;
+            _userService = userService;
         }
+
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
         public async Task<IActionResult> AddCurriculum(CurriculumInputModel curriculum)
         {
-            
+            var claims = User.Claims.ToList();
+
+            var email = claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
+            var user = await _userService.GetUserByEmail(email);
+
             var mapped = _mapper.Map<Curriculum>(curriculum);
 
-            var result = await _curriculoService.Save(mapped);
+            var curriculoResult = await _curriculoService.Save(mapped, email);
             
-            if(result)
-                return Ok();
+            if(curriculoResult is not null)
+            {
+                user.Curriculum = curriculoResult;
 
-            else
-                return BadRequest(result);
+                var updateResult = await _userService.UpdateUser(user);
+
+                if (updateResult)
+                    return CreatedAtAction(nameof(AddCurriculum), "Concluido com sucesso!");
+            }
+
+
+             return BadRequest("Erro ao salvar curriculo");
         }
+
+        // -----> Resolver problemas
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("newcontato")]
+        public async Task<IActionResult> NewContato(ContatoInputModel contatoInputModel)
+        {
+            if(ModelState.IsValid)
+            {
+                var claims = User.Claims.ToList();
+                var email = claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
+
+                var user = await _userService.GetUserByEmail(email);
+
+                if (user.Curriculum is null)
+                    return BadRequest("O usuário não tem um curriculo cadastrado!");
+
+                var contato = _mapper.Map<Contato>(contatoInputModel);
+
+                contato.CurriculumId = user.Curriculum.Id;
+
+                if (await _curriculoService.AddContato(contato))
+                    return CreatedAtAction(nameof(NewContato), "Contato Adicionado com sucesso");
+            }
+
+            return BadRequest("ModelState inválido!");
+        }
+
+
 
         [AllowAnonymous]
         [HttpGet("owner")]

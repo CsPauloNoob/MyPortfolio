@@ -10,8 +10,9 @@ namespace CurriculumWebAPI.Domain.Interfaces
     {
         public Task<int> AddNew(T entity);
         public Task<T> GetById(string id);
-        public IEnumerable<T> GetAll();
-        public Task<T> Update(string id);
+        public Task<T> GetByEmail(string email);
+        public Task<T> Update(T entity);
         public Task<bool> Delete(string id);
+
     }
 }

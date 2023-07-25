@@ -21,6 +21,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Context
             modelBuilder.Entity<ApplicationUser>()
                 .ToTable("AspNetUsers").HasKey(k => k.Id);
 
+
             modelBuilder.Entity<Curriculum>()
             .HasOne(c => c.Contato);
 

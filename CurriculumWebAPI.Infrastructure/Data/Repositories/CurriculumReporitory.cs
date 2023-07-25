@@ -25,20 +25,11 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             if(entity!=null)
             {
                 _context.Remove(entity);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return true;
             }
 
             return false;
-        }
-
-
-
-        public IEnumerable<Curriculum> GetAll()
-        {
-            var curriculos = _context.Curriculum.ToList();
-
-            return curriculos;
         }
 
 
@@ -51,23 +42,21 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return curriculo;
         }
 
+        public async Task<Curriculum> GetByEmail(string email)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+
+            return user.Curriculum;
+        }
+
         public async Task<int> AddNew(Curriculum curriculum)
         {
             _context.Curriculum.Add(curriculum);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<Curriculum> Update(string id)
+        public async Task<Curriculum> Update(Curriculum entity)
         {
-            Curriculum? curriculo = _context.Curriculum.Find(id);
-
-            if(curriculo != null)
-            {
-                _context.Update(curriculo);
-                _context.SaveChangesAsync();
-                return curriculo;
-            }
-
             return null;
         }
     }

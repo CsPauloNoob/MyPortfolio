@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection.Metadata;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 
@@ -17,8 +18,9 @@ namespace CurriculumWebAPI.Domain.Models
 
         public string SobreMim { get; set; }
 
-
+        [AllowNull]
         public Contato Contato { get; set; }
+
         public List<Formacao> Formacao { get; set; }
         public List<Experiencia_Profissional> Experiencia_Profissional { get; set; }
         public List<Habilidades> Habilidade { get; set; }

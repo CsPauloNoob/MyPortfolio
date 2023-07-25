@@ -41,6 +41,17 @@ namespace CurriculumWebAPI.Domain.Services
         }
 
 
+        public async Task<User> GetUserByEmail(string email)
+        {
+            var user = await _authManager.GetUserByEmail(email);
+
+            if (user is null)
+                throw new NotFoundInDatabase("Falha no banco, ou usuário não existe");
+
+            else return user;
+        }
+
+
         public async Task<Token> CreateUser(User User)
         {
 
@@ -58,5 +69,17 @@ namespace CurriculumWebAPI.Domain.Services
 
             return new Token();
         }
+
+
+        public async Task<bool> UpdateUser(User user)
+        {
+            var result = await _reposity.Update(user);
+
+            if (result is not null)
+                return true;
+
+            else return false;
+        }
+
     }
 }

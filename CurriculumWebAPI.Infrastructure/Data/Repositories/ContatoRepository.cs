@@ -21,9 +21,17 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
         public async Task<int> AddNew(Contato entity)
         {
-            await _context.Contato.AddAsync(entity);
+            try
+            {
+                await _context.Contato.AddAsync(entity);
 
-            return await _context.SaveChangesAsync();
+                return await _context.SaveChangesAsync();
+            }
+
+            catch(Exception ex)
+            {
+                return 0;
+            }
         }
 
         public Task<bool> Delete(string id)
@@ -31,7 +39,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Contato> GetAll()
+        public Task<Contato> GetByEmail(string email)
         {
             throw new NotImplementedException();
         }
@@ -41,7 +49,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Contato> Update(string id)
+        public Task<Contato> Update(Contato entity)
         {
             throw new NotImplementedException();
         }

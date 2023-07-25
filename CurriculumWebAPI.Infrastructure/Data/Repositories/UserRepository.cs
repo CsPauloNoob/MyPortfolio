@@ -1,4 +1,5 @@
-﻿using CurriculumWebAPI.Domain.Interfaces;
+﻿using CurriculumWebAPI.Domain.Exceptions;
+using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Infrastructure.Data.Context;
 using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
@@ -44,7 +45,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetAll()
+        public Task<User> GetByEmail(string email)
         {
             throw new NotImplementedException();
         }
@@ -73,9 +74,23 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             }
         }
 
-        public Task<User> Update(string id)
+
+        // ----> Melhorar
+        public async Task<User> Update(User entity)
         {
-            throw new NotImplementedException();
+            var newUser = _context.Users.Find(entity.Id);
+
+            if (entity.Curriculum is not null)
+            {
+                newUser.Curriculum = entity.Curriculum;
+
+                _context.Users.Update(newUser);
+                await _context.SaveChangesAsync();
+
+                return entity;
+            }
+
+            else throw new NotFoundInDatabase("");
         }
     }
 }

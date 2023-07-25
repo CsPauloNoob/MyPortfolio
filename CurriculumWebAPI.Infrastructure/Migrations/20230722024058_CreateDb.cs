@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CurriculumWebAPI.Infrastructure.Migrations
 {
-    public partial class NewDb : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,23 +24,18 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Contato",
+                name: "Curriculum",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Telefone_Codigo = table.Column<string>(type: "TEXT", nullable: false),
-                    Telefone_DDD = table.Column<string>(type: "TEXT", nullable: false),
-                    Telefone_Numero = table.Column<string>(type: "TEXT", nullable: false),
-                    Endereco_Rua = table.Column<string>(type: "TEXT", nullable: false),
-                    Endereco_Bairro = table.Column<string>(type: "TEXT", nullable: false),
-                    Endereco_NumeroCasa = table.Column<string>(type: "TEXT", nullable: false),
-                    Endereco_Cidade = table.Column<string>(type: "TEXT", nullable: false),
-                    Endereco_Estado = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Nome = table.Column<string>(type: "TEXT", nullable: false),
+                    PerfilProgramador = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    SobreMim = table.Column<string>(type: "TEXT", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Contato", x => x.Id);
+                    table.PrimaryKey("PK_Curriculum", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,28 +55,6 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Curriculum",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    Nome = table.Column<string>(type: "TEXT", nullable: false),
-                    PerfilProgramador = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    ContatoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SobreMim = table.Column<string>(type: "TEXT", nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Curriculum", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Curriculum_Contato_ContatoId",
-                        column: x => x.ContatoId,
-                        principalTable: "Contato",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -115,6 +88,33 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                         column: x => x.CurriculumId,
                         principalTable: "Curriculum",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Contato",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Telefone_Codigo = table.Column<string>(type: "TEXT", nullable: false),
+                    Telefone_DDD = table.Column<string>(type: "TEXT", nullable: false),
+                    Telefone_Numero = table.Column<string>(type: "TEXT", nullable: false),
+                    Endereco_Rua = table.Column<string>(type: "TEXT", nullable: false),
+                    Endereco_Bairro = table.Column<string>(type: "TEXT", nullable: false),
+                    Endereco_NumeroCasa = table.Column<string>(type: "TEXT", nullable: false),
+                    Endereco_Cidade = table.Column<string>(type: "TEXT", nullable: false),
+                    Endereco_Estado = table.Column<string>(type: "TEXT", nullable: false),
+                    CurriculumId = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contato", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Contato_Curriculum_CurriculumId",
+                        column: x => x.CurriculumId,
+                        principalTable: "Curriculum",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -331,9 +331,10 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Curriculum_ContatoId",
-                table: "Curriculum",
-                column: "ContatoId");
+                name: "IX_Contato_CurriculumId",
+                table: "Contato",
+                column: "CurriculumId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cursos_Extras_CurriculumId",
@@ -374,6 +375,9 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Contato");
+
+            migrationBuilder.DropTable(
                 name: "Cursos_Extras");
 
             migrationBuilder.DropTable(
@@ -393,9 +397,6 @@ namespace CurriculumWebAPI.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Curriculum");
-
-            migrationBuilder.DropTable(
-                name: "Contato");
         }
     }
 }
