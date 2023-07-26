@@ -21,11 +21,16 @@ namespace CurriculumWebAPI.Domain.Services
             _contatoRepository = contatoRepository;
         }
 
-        public async Task<Curriculum> GetById(string id)
+        public async Task<Curriculum> GetByEmail(string email)
         {
-            var result = await _curriculumRepository.GetById(id);
 
-            return result;
+            var result = await _curriculumRepository.GetByEmail(email);
+
+            if (result is null)
+                throw new NotFoundInDatabaseException("Erro no banco ou objeto não encontrado");
+
+            else return result;
+
         }
 
 

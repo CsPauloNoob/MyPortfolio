@@ -1,11 +1,7 @@
 ﻿using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Infrastructure.Data.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 {
@@ -44,7 +40,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
         public async Task<Curriculum> GetByEmail(string email)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            var user = _context.Users.Include(c => c.Curriculum).FirstOrDefault(u => u.Email == email);
 
             return user.Curriculum;
         }

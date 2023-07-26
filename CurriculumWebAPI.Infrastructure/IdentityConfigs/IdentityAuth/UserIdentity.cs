@@ -59,17 +59,6 @@ namespace CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth
         }
 
 
-        public async Task<User> GetUserByEmail(string email)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            return new User() { Id = user.Id, 
-                Email = user.Email, 
-                UserName = user.UserName, 
-                Curriculum = user.Curriculum };
-        }
-
-
         public async Task<bool> UserExists(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);

@@ -43,10 +43,10 @@ namespace CurriculumWebAPI.Domain.Services
 
         public async Task<User> GetUserByEmail(string email)
         {
-            var user = await _authManager.GetUserByEmail(email);
+            var user = await _reposity.GetByEmail(email);
 
             if (user is null)
-                throw new NotFoundInDatabase("Falha no banco, ou usuário não existe");
+                throw new NotFoundInDatabaseException("Falha no banco, ou usuário não existe");
 
             else return user;
         }

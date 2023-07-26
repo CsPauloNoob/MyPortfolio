@@ -4,6 +4,7 @@ using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Infrastructure.Data.Context;
 using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +48,13 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
         public Task<User> GetByEmail(string email)
         {
-            throw new NotImplementedException();
+            var user = _context.Users.Include(c => c.Curriculum)
+                .FirstOrDefault(x => x.Email == email);
+
+            return Task.FromResult(new User() { Curriculum = user.Curriculum, 
+                Email = user.Email, 
+                Id = user.Id, 
+                UserName = user.UserName });
         }
 
         public async Task<User> GetById(string id)
@@ -90,7 +97,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
                 return entity;
             }
 
-            else throw new NotFoundInDatabase("");
+            else throw new NotFoundInDatabaseException("");
         }
     }
 }

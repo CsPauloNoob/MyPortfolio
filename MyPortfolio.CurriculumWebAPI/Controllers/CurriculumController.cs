@@ -1,5 +1,6 @@
 using AutoMapper;
 using CurriculumWebAPI.App.InputModels;
+using CurriculumWebAPI.App.ViewModels;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using CurriculumWebAPI.Domain.Services;
@@ -31,8 +32,21 @@ namespace CurriculumWebAPI.App.Controllers
 
 
         [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet]
+        public async Task<CurriculumViewModel> Get()
+        {
+            var claims = User.Claims.ToList();
+
+            var email = claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
+            var curriculum = await _curriculoService.GetByEmail(email);
+
+            return _mapper.Map<CurriculumViewModel>(curriculum);
+        }
+
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<IActionResult> AddCurriculum(CurriculumInputModel curriculum)
+        public async Task<IActionResult> Post(CurriculumInputModel curriculum)
         {
             var claims = User.Claims.ToList();
 
@@ -50,7 +64,7 @@ namespace CurriculumWebAPI.App.Controllers
                 var updateResult = await _userService.UpdateUser(user);
 
                 if (updateResult)
-                    return CreatedAtAction(nameof(AddCurriculum), "Concluido com sucesso!");
+                    return CreatedAtAction(nameof(Post), "Concluido com sucesso!");
             }
 
 
@@ -77,7 +91,7 @@ namespace CurriculumWebAPI.App.Controllers
                 contato.CurriculumId = user.Curriculum.Id;
 
                 if (await _curriculoService.AddContato(contato))
-                    return CreatedAtAction(nameof(NewContato), "Contato Adicionado com sucesso");
+                    return CreatedAtAction(nameof(_curriculoService.AddContato), new {id = user.Id});
             }
 
             return BadRequest("ModelState inválido!");
