@@ -58,5 +58,18 @@ namespace CurriculumWebAPI.Domain.Services
 
             else return false;
         }
+
+        public async Task<Contato> GetContatoFromCurriculumByEmail(string email)
+        {
+            var curriculum = await _curriculumRepository.GetByEmail(email);
+
+            if (curriculum is not null && 
+                curriculum.Contato is not null)
+
+                return curriculum.Contato;
+
+            else
+                throw new NotFoundInDatabaseException("sessão de contato não preenchida.");
+        }
     }
 }

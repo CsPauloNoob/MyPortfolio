@@ -1,4 +1,5 @@
 using AutoMapper;
+using CurriculumWebAPI.App.Extensions;
 using CurriculumWebAPI.App.InputModels;
 using CurriculumWebAPI.App.ViewModels;
 using CurriculumWebAPI.Domain.Models;
@@ -33,14 +34,14 @@ namespace CurriculumWebAPI.App.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
-        public async Task<CurriculumViewModel> Get()
+        public async Task<IActionResult> Get()
         {
             var claims = User.Claims.ToList();
 
             var email = claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
             var curriculum = await _curriculoService.GetByEmail(email);
 
-            return _mapper.Map<CurriculumViewModel>(curriculum);
+            return Ok(_mapper.Map<CurriculumViewModel>(curriculum));
         }
 
 
@@ -67,13 +68,14 @@ namespace CurriculumWebAPI.App.Controllers
                     return CreatedAtAction(nameof(Post), "Concluido com sucesso!");
             }
 
-
              return BadRequest("Erro ao salvar curriculo");
         }
 
+        #region Contato Controllers
+
         // -----> Resolver problemas
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPost("newcontato")]
+        [HttpPost("contato")]
         public async Task<IActionResult> NewContato(ContatoInputModel contatoInputModel)
         {
             if(ModelState.IsValid)
@@ -88,16 +90,32 @@ namespace CurriculumWebAPI.App.Controllers
 
                 var contato = _mapper.Map<Contato>(contatoInputModel);
 
+                //Seta Id do curriculo para relacionar com contato
                 contato.CurriculumId = user.Curriculum.Id;
 
+                //Salva no banco e retorna bool para validação
                 if (await _curriculoService.AddContato(contato))
-                    return CreatedAtAction(nameof(_curriculoService.AddContato), new {id = user.Id});
+                    return CreatedAtAction(nameof(_curriculoService.AddContato), contatoInputModel);
             }
 
             return BadRequest("ModelState inválido!");
         }
 
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("contato")]
+        public async Task<IActionResult> GetContato()
+        {
+            var email = await this.GetEmailFromUser();
+
+            var contato = await _curriculoService.GetContatoFromCurriculumByEmail(email);
+
+            return Ok(_mapper.Map<ContatoViewModel>(contato));
+        }
+
+
+
+        #endregion
 
         [AllowAnonymous]
         [HttpGet("owner")]

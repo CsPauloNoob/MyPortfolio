@@ -23,7 +23,9 @@ namespace CurriculumWebAPI.Infrastructure.Data.Context
 
 
             modelBuilder.Entity<Curriculum>()
-            .HasOne(c => c.Contato);
+            .HasOne(c => c.Contato)
+            .WithOne()
+            .HasForeignKey<Contato>("CurriculumId");
 
             modelBuilder.Entity<Curriculum>()
                 .HasMany(f => f.Formacao)

@@ -23,14 +23,15 @@ namespace CurriculumWebAPI.App.MapperConfig
             CreateMap<ContatoInputModel, Contato>()
             .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => 
             new PhoneNumber { Codigo = src.Codigo, DDD = src.DDD, Numero = 
-            src.Numero.ToString() }))
+            src.NumeroTelefone_Celular.ToString() }))
             .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => 
             new Address { Rua = src.Rua, Bairro = src.Bairro, NumeroCasa = 
             src.NumeroCasa, Cidade = src.Cidade, Estado = src.Estado }));
 
+
             CreateMap<Curriculum, CurriculumViewModel>();
 
-
+            CreateMap<Contato, ContatoViewModel>();
 
 
             // Conversão personalizada para PhoneNumber
