@@ -1,4 +1,5 @@
-﻿using CurriculumWebAPI.Domain.Interfaces;
+﻿using CurriculumWebAPI.Domain.Exceptions;
+using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using CurriculumWebAPI.Infrastructure.Data.Context;
 using SQLitePCL;
@@ -41,12 +42,16 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
         public Task<Contato> GetByEmail(string email)
         {
-            throw new NotImplementedException();
+            //var contato = _context
+            throw new Exception();
         }
 
-        public Task<Contato> GetById(string id)
+        public Task<Contato> GetById(string curriculumId)
         {
-            throw new NotImplementedException();
+            var contato = _context.Contato.
+                FirstOrDefault(c => c.CurriculumId == curriculumId);
+
+            return Task.FromResult(contato);
         }
 
         public Task<Contato> Update(Contato entity)

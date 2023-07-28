@@ -36,9 +36,9 @@ namespace CurriculumWebAPI.Domain.Services
 
         public async Task<Curriculum> Save(Curriculum curriculum, string emailUser)
         {
-            var curriculumUser = await _curriculumRepository.GetByEmail(emailUser);
+            var isNew = await IsNewCurriculum(emailUser);
 
-            if (curriculumUser is null)
+            if (isNew)
             {
                 curriculum.Id = Guid.NewGuid().ToString();
 
@@ -48,6 +48,35 @@ namespace CurriculumWebAPI.Domain.Services
 
             throw new SaveFailedException("Erro ao salvar curriculo");
         }
+
+
+        private async Task<bool> IsNewCurriculum(string email)
+        {
+            try
+            {
+                var result = await _curriculumRepository.GetByEmail(email);
+                return false;
+            }
+
+            catch(Exception)
+            {
+                return true;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public async Task<bool> AddContato(Contato contato)
         {
@@ -63,10 +92,10 @@ namespace CurriculumWebAPI.Domain.Services
         {
             var curriculum = await _curriculumRepository.GetByEmail(email);
 
-            if (curriculum is not null && 
-                curriculum.Contato is not null)
+            var contato = await _contatoRepository.GetById(curriculum.Id);
 
-                return curriculum.Contato;
+            if (contato is not null)
+                return contato;
 
             else
                 throw new NotFoundInDatabaseException("sessão de contato não preenchida.");

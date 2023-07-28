@@ -1,4 +1,5 @@
-﻿using CurriculumWebAPI.Domain.Interfaces;
+﻿using CurriculumWebAPI.Domain.Exceptions;
+using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,9 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
         public async Task<Curriculum> GetByEmail(string email)
         {
             var user = _context.Users.Include(c => c.Curriculum).FirstOrDefault(u => u.Email == email);
+
+            if (user.Curriculum is null)
+                throw new NotFoundInDatabaseException("Curriculum não existe");
 
             return user.Curriculum;
         }

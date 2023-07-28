@@ -31,7 +31,17 @@ namespace CurriculumWebAPI.App.MapperConfig
 
             CreateMap<Curriculum, CurriculumViewModel>();
 
-            CreateMap<Contato, ContatoViewModel>();
+            //CreateMap<Contato, ContatoViewModel>();
+
+            CreateMap<Contato, ContatoViewModel>()
+            .ForMember(dest => dest.NumeroCasa, opt => opt.MapFrom(src => src.Endereco.NumeroCasa))
+            .ForMember(dest => dest.DDD, opt => opt.MapFrom(src => src.Telefone.DDD))
+            .ForMember(dest => dest.NumeroTelefone_Celular, opt => opt.MapFrom(src => src.Telefone.Numero))
+            .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.Telefone.Codigo))
+            .ForMember(dest => dest.Bairro, opt => opt.MapFrom(src => src.Endereco.Bairro))
+            .ForMember(dest => dest.Rua, opt => opt.MapFrom(src => src.Endereco.Rua))
+            .ForMember(dest => dest.Cidade, opt => opt.MapFrom(src => src.Endereco.Cidade))
+            .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Endereco.Estado));
 
 
             // Conversão personalizada para PhoneNumber

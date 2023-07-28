@@ -2,6 +2,7 @@ using AutoMapper;
 using CurriculumWebAPI.App.Extensions;
 using CurriculumWebAPI.App.InputModels;
 using CurriculumWebAPI.App.ViewModels;
+using CurriculumWebAPI.Domain.Exceptions;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using CurriculumWebAPI.Domain.Services;
@@ -22,8 +23,8 @@ namespace CurriculumWebAPI.App.Controllers
         private readonly UserService _userService;
 
 
-        public CurriculumController(CurriculumService curriculumService, 
-            PdfService pdfServices ,Mapper mapper, UserService userService)
+        public CurriculumController(CurriculumService curriculumService,
+            PdfService pdfServices, Mapper mapper, UserService userService)
         {
             _mapper = mapper;
             _pdfServices = pdfServices;
@@ -36,12 +37,18 @@ namespace CurriculumWebAPI.App.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var claims = User.Claims.ToList();
+            try
+            {
+                var email = await this.GetEmailFromUser();
+                var curriculum = await _curriculoService.GetByEmail(email);
 
-            var email = claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
-            var curriculum = await _curriculoService.GetByEmail(email);
+                return Ok(_mapper.Map<CurriculumViewModel>(curriculum));
+            }
 
-            return Ok(_mapper.Map<CurriculumViewModel>(curriculum));
+            catch (NotFoundInDatabaseException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
@@ -49,26 +56,32 @@ namespace CurriculumWebAPI.App.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(CurriculumInputModel curriculum)
         {
-            var claims = User.Claims.ToList();
 
-            var email = claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
-            var user = await _userService.GetUserByEmail(email);
+            var email = await this.GetEmailFromUser();
 
-            var mapped = _mapper.Map<Curriculum>(curriculum);
-
-            var curriculoResult = await _curriculoService.Save(mapped, email);
-            
-            if(curriculoResult is not null)
+            try
             {
+                var mapped = _mapper.Map<Curriculum>(curriculum);
+
+                var curriculoResult = await _curriculoService.Save(mapped, email);
+                //Recupera user para vincular curriculo novo
+                var user = await _userService.GetUserByEmail(email);
+
                 user.Curriculum = curriculoResult;
 
+                //Dá update no user com curriculo
                 var updateResult = await _userService.UpdateUser(user);
 
                 if (updateResult)
                     return CreatedAtAction(nameof(Post), "Concluido com sucesso!");
             }
 
-             return BadRequest("Erro ao salvar curriculo");
+            catch (NotFoundInDatabaseException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return BadRequest("Erro ao salvar curriculo");
         }
 
         #region Contato Controllers
@@ -78,7 +91,7 @@ namespace CurriculumWebAPI.App.Controllers
         [HttpPost("contato")]
         public async Task<IActionResult> NewContato(ContatoInputModel contatoInputModel)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var claims = User.Claims.ToList();
                 var email = claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
@@ -102,26 +115,35 @@ namespace CurriculumWebAPI.App.Controllers
         }
 
 
+        // --> Modelo de implementação
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("contato")]
         public async Task<IActionResult> GetContato()
         {
             var email = await this.GetEmailFromUser();
 
-            var contato = await _curriculoService.GetContatoFromCurriculumByEmail(email);
+            try
+            {
+                var contato = await _curriculoService.GetContatoFromCurriculumByEmail(email);
 
-            return Ok(_mapper.Map<ContatoViewModel>(contato));
+                return Ok(_mapper.Map<ContatoViewModel>(contato));
+            }
+
+            catch (NotFoundInDatabaseException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-
-
         #endregion
+
+
 
         [AllowAnonymous]
         [HttpGet("owner")]
         public async Task<string> GetOwner()
         {
-            return await  _pdfServices.GetPauloCurriculumPdf();
+            return await _pdfServices.GetPauloCurriculumPdf();
         }
     }
 }
