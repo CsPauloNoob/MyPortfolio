@@ -24,5 +24,6 @@ namespace CurriculumWebAPI.Domain.Models.CurriculumBody
 
             return $"{emailRow}\n{telefoneRow}\n{enderecoRow}";
         }
+       
     }
 }

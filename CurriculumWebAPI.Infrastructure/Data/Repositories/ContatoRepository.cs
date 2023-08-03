@@ -22,17 +22,10 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
         public async Task<int> AddNew(Contato entity)
         {
-            try
-            {
-                await _context.Contato.AddAsync(entity);
 
-                return await _context.SaveChangesAsync();
-            }
+            await _context.Contato.AddAsync(entity);
 
-            catch(Exception ex)
-            {
-                return 0;
-            }
+            return await _context.SaveChangesAsync();
         }
 
         public Task<bool> Delete(string id)
@@ -54,9 +47,13 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return Task.FromResult(contato);
         }
 
-        public Task<Contato> Update(Contato entity)
+        public async Task<Contato> Update(Contato contato)
         {
-            throw new NotImplementedException();
+            var result = _context.Contato.Update(contato);
+
+            await _context.SaveChangesAsync();
+
+            return contato;
         }
     }
 }

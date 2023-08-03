@@ -44,13 +44,9 @@ namespace CurriculumWebAPI.App.MapperConfig
             .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Endereco.Estado));
 
 
-            // Conversão personalizada para PhoneNumber
-            /*CreateMap<string, PhoneNumber>()
-                .ConvertUsing(src => new PhoneNumber { Numero = src });
 
-            // Conversão personalizada para Address
-            CreateMap<ContatoInputModel, Address>()
-                .ConvertUsing(src => new Address { Rua = src.Rua, Bairro = src.Bairro, NumeroCasa = src.NumeroCasa, Cidade = src.Cidade, Estado = src.Estado });*/
+            CreateMap<FormacaoInputModel, Formacao>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
         }
     }
 }

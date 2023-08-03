@@ -58,7 +58,7 @@ namespace CurriculumWebAPI.Domain.Services
                 return false;
             }
 
-            catch(Exception)
+            catch (Exception)
             {
                 return true;
             }
@@ -75,7 +75,7 @@ namespace CurriculumWebAPI.Domain.Services
 
 
 
-
+        #region Contato Services
 
 
         public async Task<bool> AddContato(Contato contato)
@@ -88,17 +88,26 @@ namespace CurriculumWebAPI.Domain.Services
             else return false;
         }
 
-        public async Task<Contato> GetContatoFromCurriculumByEmail(string email)
+        public async Task<Contato> GetContatoFromCurriculumByEmail(string email, bool shotException = true)
         {
             var curriculum = await _curriculumRepository.GetByEmail(email);
 
             var contato = await _contatoRepository.GetById(curriculum.Id);
 
-            if (contato is not null)
-                return contato;
-
-            else
+            if (shotException && contato is null)
                 throw new NotFoundInDatabaseException("sessão de contato não preenchida.");
+
+            return contato;
         }
+
+
+        public async Task<Contato> UpdateContato(Contato contato)
+        {
+            await _contatoRepository.Update(contato);
+
+            return contato;
+        }
+
+        #endregion
     }
 }

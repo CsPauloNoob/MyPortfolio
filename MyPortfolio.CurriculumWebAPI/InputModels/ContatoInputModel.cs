@@ -28,6 +28,7 @@ namespace CurriculumWebAPI.App.InputModels
         [MaxLength(2)]
         public string DDD { get; set; }
 
-        public int NumeroTelefone_Celular { get; set; }
+        [MaxLength(10)]
+        public string NumeroTelefone_Celular { get; set; }
     }
 }

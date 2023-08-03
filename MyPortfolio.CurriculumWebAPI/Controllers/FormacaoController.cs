@@ -18,12 +18,15 @@ namespace CurriculumWebAPI.App.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFormacao([FromBody] FormacaoInputModel educacaoViewModel)
         {
-            if(ModelState.IsValid)
+            try
             {
 
             }
 
-            return CreatedAtAction(nameof(AddFormacao), educacaoViewModel);
+            catch(Exception)
+            {
+
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 using AutoMapper;
 using CurriculumWebAPI.App.Extensions;
 using CurriculumWebAPI.App.InputModels;
+using CurriculumWebAPI.App.Utitlities;
 using CurriculumWebAPI.App.ViewModels;
 using CurriculumWebAPI.Domain.Exceptions;
 using CurriculumWebAPI.Domain.Models;
@@ -53,7 +54,7 @@ namespace CurriculumWebAPI.App.Controllers
 
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPost]
+        [HttpPost()]
         public async Task<IActionResult> Post(CurriculumInputModel curriculum)
         {
 
@@ -73,16 +74,17 @@ namespace CurriculumWebAPI.App.Controllers
                 var updateResult = await _userService.UpdateUser(user);
 
                 if (updateResult)
-                    return CreatedAtAction(nameof(Post), "Concluido com sucesso!");
+                    return CreatedAtAction(nameof(Post), "Curriculum criado com sucesso!");
             }
 
             catch (NotFoundInDatabaseException ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
 
             return BadRequest("Erro ao salvar curriculo");
         }
+
 
         #region Contato Controllers
 
@@ -91,10 +93,16 @@ namespace CurriculumWebAPI.App.Controllers
         [HttpPost("contato")]
         public async Task<IActionResult> NewContato(ContatoInputModel contatoInputModel)
         {
-            if (ModelState.IsValid)
+
+            try
             {
-                var claims = User.Claims.ToList();
-                var email = claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
+                var email = await this.GetEmailFromUser();
+                var contatoIfExists = await _curriculoService.
+                    GetContatoFromCurriculumByEmail(email, false);
+
+                if (contatoIfExists is not null)
+                    return BadRequest("Não é possível sobrescrever, " +
+                        "para modificar use o endpoint de PUT");
 
                 var user = await _userService.GetUserByEmail(email);
 
@@ -108,10 +116,18 @@ namespace CurriculumWebAPI.App.Controllers
 
                 //Salva no banco e retorna bool para validação
                 if (await _curriculoService.AddContato(contato))
-                    return CreatedAtAction(nameof(_curriculoService.AddContato), contatoInputModel);
+
+                    return CreatedAtAction(nameof(
+                        _curriculoService.AddContato), contatoInputModel);
             }
 
-            return BadRequest("ModelState inválido!");
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return BadRequest("Não foi possível salvar!");
+
         }
 
 
@@ -132,6 +148,35 @@ namespace CurriculumWebAPI.App.Controllers
             catch (NotFoundInDatabaseException ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPut("contato/update")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> PutContato([FromBody] ContatoInputModel contatoInputModel)
+        {
+            var email = await this.GetEmailFromUser();
+
+            try
+            {
+                var contato = await _curriculoService.GetContatoFromCurriculumByEmail(email);
+
+                //Atualiza todos os campos fornecidos pelo controller
+                contato.Email = contatoInputModel.Email;
+                contato.Telefone = ObjectUpdater.GetPhoneNumberFromInputModel(contatoInputModel);
+                contato.Endereco = ObjectUpdater.GetAddressFromInputModel(contatoInputModel);
+
+                contato = await _curriculoService.UpdateContato(contato);
+
+
+
+                return Ok(new { contato.Email, contato.Telefone, contato.Endereco });
+            }
+
+            catch (NotFoundInDatabaseException ex)
+            {
+                return NotFound(ex.Message);
             }
         }
 

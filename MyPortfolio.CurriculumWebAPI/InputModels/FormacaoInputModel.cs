@@ -1,10 +1,14 @@
-﻿namespace CurriculumWebAPI.App.InputModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CurriculumWebAPI.App.InputModels
 {
     public class FormacaoInputModel
     {
-        public Guid Id { get; set; }
+        [MaxLength(30)]
         public string Instituicao { get; set; }
+        [MaxLength(35)]
         public string Curso { get; set; }
+        [MaxLength(4)]
         public int AnoConclusao { get; set; }
     }
 }

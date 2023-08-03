@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CurriculumWebAPI.App.ViewModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace CurriculumWebAPI.App.InputModels
 {
@@ -14,5 +15,9 @@ namespace CurriculumWebAPI.App.InputModels
         public string SobreMim { get; set; }
 
         public DateTime DataCriacao { get; set; }
+
+        public ContatoViewModel Contato { get; set; }
+
+        public FormacaoViewModel Formacao { get; set; }
     }
 }
