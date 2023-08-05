@@ -21,12 +21,24 @@ namespace CurriculumWebAPI.App.MapperConfig
                 .ForMember(u => u.Curriculum, opt => opt.Ignore());
 
             CreateMap<ContatoInputModel, Contato>()
-            .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => 
-            new PhoneNumber { Codigo = src.Codigo, DDD = src.DDD, Numero = 
-            src.NumeroTelefone_Celular.ToString() }))
-            .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => 
-            new Address { Rua = src.Rua, Bairro = src.Bairro, NumeroCasa = 
-            src.NumeroCasa, Cidade = src.Cidade, Estado = src.Estado }));
+            .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src =>
+            new PhoneNumber
+            {
+                Codigo = src.Codigo,
+                DDD = src.DDD,
+                Numero =
+            src.NumeroTelefone_Celular.ToString()
+            }))
+            .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src =>
+            new Address
+            {
+                Rua = src.Rua,
+                Bairro = src.Bairro,
+                NumeroCasa =
+            src.NumeroCasa,
+                Cidade = src.Cidade,
+                Estado = src.Estado
+            }));
 
 
             CreateMap<Curriculum, CurriculumViewModel>();
@@ -45,8 +57,13 @@ namespace CurriculumWebAPI.App.MapperConfig
 
 
 
+            /*CreateMap<FormacaoInputModel, Formacao>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());*/
+
             CreateMap<FormacaoInputModel, Formacao>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore());
+            .ForMember(dest => dest.AnoConclusao, opt => opt.MapFrom(src => int.Parse(src.AnoConclusao)))
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+
         }
     }
 }

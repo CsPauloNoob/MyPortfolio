@@ -6,9 +6,12 @@ namespace CurriculumWebAPI.App.InputModels
     {
         [MaxLength(30)]
         public string Instituicao { get; set; }
+
         [MaxLength(35)]
         public string Curso { get; set; }
+
         [MaxLength(4)]
-        public int AnoConclusao { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Ano de conclusão deve conter somente números.")]
+        public string AnoConclusao { get; set; }
     }
 }

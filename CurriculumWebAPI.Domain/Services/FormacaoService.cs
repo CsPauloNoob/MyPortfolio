@@ -17,10 +17,20 @@ namespace CurriculumWebAPI.Domain.Services
             _repository = repository;
         }
 
-        public async Task<bool> AddFormacao(Formacao formacao)
+        public async Task<bool> AddFormacao(Formacao formacao, string curriculumId)
         {
-            return true;
+            formacao.CurriculumId = curriculumId;
+            var result = await _repository.AddNew(formacao);
+
+            if(result>0)
+                return true;
+
+            return false;
         }
 
+        public async Task<List<Formacao>> GetByEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
