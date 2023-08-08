@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CurriculumWebAPI.Domain.Models.CurriculumBody;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,12 @@ namespace CurriculumWebAPI.Domain.Interfaces
 {
     public interface IRepositoryForCollections<T> where T : class
     {
-        public Task<IEnumerable<T>> GetAllByEmailAsync(string email);
-        //Resolver problema de se faz sentido enviar uma formacao por vez
+        public Task<int> AddNew(T entity);
+        public Task<List<T>> GetAllByCurriculumId(string curriculumId);
+        public Task<bool> Update(T entity);
+        public Task<bool> DeleteA(T entity);
+        public Task<string> GetCurriculumId(string email);
+
+
     }
 }

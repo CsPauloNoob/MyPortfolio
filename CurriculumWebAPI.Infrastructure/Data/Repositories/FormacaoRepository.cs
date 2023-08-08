@@ -1,15 +1,13 @@
 ﻿using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using CurriculumWebAPI.Infrastructure.Data.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CurriculumWebAPI.Domain.Exceptions;
+using Microsoft.EntityFrameworkCore;
+using CurriculumWebAPI.Domain.Models;
 
 namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 {
-    public class FormacaoRepository : IRepository<Formacao>
+    public class FormacaoRepository : IRepositoryForCollections<Formacao>
     {
         private readonly MyContext _context;
 
@@ -27,24 +25,41 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public Task<bool> Delete(string id)
+        public Task<List<Formacao>> GetAllByCurriculumId(string id)
         {
-            throw new NotImplementedException();
+            var queryResult = 
+                _context.Formacao.Where(f => f.CurriculumId == id);
+
+            return Task.FromResult(queryResult.ToList());
         }
 
-        public Task<Formacao> GetByEmail(string email)
+        public async Task<bool> Update(Formacao entity)
         {
-            throw new NotImplementedException();
+            _context.Formacao.Update(entity);
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
-        public Task<Formacao> GetById(string id)
+        public async Task<bool> DeleteA(Formacao entity)
         {
-            throw new NotImplementedException();
+            _context.Formacao.Remove(entity);
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
-        public Task<Formacao> Update(Formacao entity)
+
+
+        public async Task<string> GetCurriculumId(string email)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.Include(c => c.Curriculum)
+                .FirstOrDefaultAsync(c => c.Email == email);
+
+            return user.Curriculum.Id;
+
         }
     }
 }

@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using CurriculumWebAPI.App.Extensions;
 using CurriculumWebAPI.App.InputModels;
+using CurriculumWebAPI.App.ViewModels;
 using CurriculumWebAPI.Domain.Exceptions;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using CurriculumWebAPI.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace CurriculumWebAPI.App.Controllers
 {
@@ -28,7 +30,7 @@ namespace CurriculumWebAPI.App.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<IActionResult> AddFormacao([FromBody] FormacaoInputModel[] formacaoInputModel)
+        public async Task<IActionResult> Post([FromBody] FormacaoInputModel[] formacaoInputModel)
         {
             try
             {
@@ -43,7 +45,6 @@ namespace CurriculumWebAPI.App.Controllers
                 }
 
                 return CreatedAtAction(nameof(_formacaoService.AddFormacao), formacaoInputModel);
-
             }
 
             catch (NotFoundInDatabaseException ex)
@@ -55,12 +56,35 @@ namespace CurriculumWebAPI.App.Controllers
         }
 
 
+
+        /// <summary>
+        /// Retorna uma lista com todos as Formações no banco associados ao usuário
+        /// </summary>
+        /// <returns></returns>
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<List<FormacaoViewModel>>> Get()
         {
-            return null;
-        }
+            try
+            {
+                var email = await this.GetEmailFromUser();
 
+                var formacao = await _formacaoService.GetAllByEmail(email);
+
+                List<FormacaoViewModel> formacaoViewModel = new List<FormacaoViewModel>();
+
+                foreach(var item in formacao)
+                {
+                    formacaoViewModel.Add(_mapper.Map<FormacaoViewModel>(item));
+                }
+
+                return Ok(formacaoViewModel);
+            }
+
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

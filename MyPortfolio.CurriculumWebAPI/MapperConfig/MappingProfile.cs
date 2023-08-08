@@ -64,6 +64,8 @@ namespace CurriculumWebAPI.App.MapperConfig
             .ForMember(dest => dest.AnoConclusao, opt => opt.MapFrom(src => int.Parse(src.AnoConclusao)))
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
+
+            CreateMap<Formacao, FormacaoViewModel>();
         }
     }
 }

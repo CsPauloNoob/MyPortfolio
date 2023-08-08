@@ -44,7 +44,7 @@ namespace CurriculumWebAPI.DI
             #region DI region
 
             services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
-            services.AddScoped(typeof(IRepository<Formacao>), typeof(FormacaoRepository));
+            services.AddScoped(typeof(IRepositoryForCollections<Formacao>), typeof(FormacaoRepository));
             services.AddScoped(typeof(IRepository<User>), typeof(UserRepository));
             services.AddScoped(typeof(IRepository<Contato>), typeof(ContatoRepository));
             services.AddScoped(typeof(IUserIdentity), typeof(UserIdentity));
