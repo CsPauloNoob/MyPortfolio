@@ -11,10 +11,9 @@ namespace CurriculumWebAPI.Domain.Interfaces
     {
         public Task<int> AddNew(T entity);
         public Task<List<T>> GetAllByCurriculumId(string curriculumId);
+        public Task<T> GetById(int id);
+        public Task<string> GetCurriculumId(string email);
         public Task<bool> Update(T entity);
         public Task<bool> DeleteA(T entity);
-        public Task<string> GetCurriculumId(string email);
-
-
     }
 }

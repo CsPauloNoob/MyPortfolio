@@ -83,8 +83,39 @@ namespace CurriculumWebAPI.App.Controllers
 
             catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<FormacaoViewModel>> Put(int id, FormacaoInputModel formacaoInputModel)
+        {
+
+            try
+            {
+                var email = await this.GetEmailFromUser();
+
+                var formacao = _mapper.Map<FormacaoViewModel>( 
+                    await _formacaoService.UpdateFormacao
+                    (id,_mapper.Map<Formacao>(formacaoInputModel), email));
+
+                
+
+                return Ok(formacao);
+            }
+
+            catch(NotFoundInDatabaseException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            catch(SaveFailedException ex)
+            {
+                return StatusCode(500,ex.Message);
+            }
+            
+        }
+
     }
 }

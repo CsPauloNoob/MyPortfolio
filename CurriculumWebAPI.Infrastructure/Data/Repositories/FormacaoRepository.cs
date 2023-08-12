@@ -33,13 +33,20 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return Task.FromResult(queryResult.ToList());
         }
 
+        public async Task<Formacao> GetById(int id)
+        {
+            var formacao = await _context.Formacao.FindAsync(id);
+
+            return formacao;
+        }
+
         public async Task<bool> Update(Formacao entity)
         {
             _context.Formacao.Update(entity);
 
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
 
-            return true;
+            return result > 0 ? true : false;
         }
 
         public async Task<bool> DeleteA(Formacao entity)
