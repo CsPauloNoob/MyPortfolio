@@ -44,7 +44,7 @@ namespace CurriculumWebAPI.App.Controllers
                         AddFormacao(_mapper.Map<Formacao>(formacao), curriculum.Id);
                 }
 
-                return CreatedAtAction(nameof(_formacaoService.AddFormacao), formacaoInputModel);
+                return CreatedAtAction(nameof(Get), formacaoInputModel);
             }
 
             catch (NotFoundInDatabaseException ex)
@@ -119,10 +119,40 @@ namespace CurriculumWebAPI.App.Controllers
 
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteById(int id)
         {
+            try
+            {
+                await _formacaoService.DeleteFormacao(id);
 
+                return Ok();
+            }
+
+            catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteAll()
+        {
+            try
+            {
+                var email = await this.GetEmailFromUser();
+
+                await _formacaoService.DeleteAll(email);
+
+                return Ok();
+            }
+
+            catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

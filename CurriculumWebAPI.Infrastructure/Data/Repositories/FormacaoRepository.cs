@@ -49,7 +49,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return result > 0 ? true : false;
         }
 
-        public async Task<int> Delete(Formacao entity)
+        public async Task<int> DeleteByItem(Formacao entity)
         {
             _context.Formacao.Remove(entity);
 
@@ -67,6 +67,15 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
             return user.Curriculum.Id;
 
+        }
+
+        public async Task<int> DeleteAllItems(Formacao[] formacao)
+        {
+            _context.Formacao.RemoveRange(formacao);
+
+            var result = await _context.SaveChangesAsync();
+
+            return result;
         }
     }
 }

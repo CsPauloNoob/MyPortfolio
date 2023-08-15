@@ -76,7 +76,7 @@ namespace CurriculumWebAPI.Domain.Services
             if (existingFormacao is null)
                 throw new NotFoundInDatabaseException("Objeto não encontrado no banco");
 
-            var result =await _repository.Delete(existingFormacao);
+            var result =await _repository.DeleteByItem(existingFormacao);
 
             if (result > 0)
                 return true;
@@ -85,5 +85,18 @@ namespace CurriculumWebAPI.Domain.Services
                 throw new SaveFailedException("Não foi possível salvar as alterações no banco");
         }
         
+
+        public async Task<bool> DeleteAll(string email)
+        {
+            var formacaoList = await GetAllByEmail(email);
+
+            var result = await _repository.DeleteAllItems(formacaoList.ToArray());
+
+            if (result < 1)
+                throw new SaveFailedException("Não foi possível salvar as alterações no banco");
+
+            return true;
+        }
+
     }
 }
