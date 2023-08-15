@@ -67,5 +67,23 @@ namespace CurriculumWebAPI.Domain.Services
             else
                throw new SaveFailedException("Erro ao salvar módulo de formação no banco!");
         }
+
+
+        public async Task<bool> DeleteFormacao(int id)
+        {
+            var existingFormacao = await _repository.GetById(id);
+
+            if (existingFormacao is null)
+                throw new NotFoundInDatabaseException("Objeto não encontrado no banco");
+
+            var result =await _repository.Delete(existingFormacao);
+
+            if (result > 0)
+                return true;
+
+            else
+                throw new SaveFailedException("Não foi possível salvar as alterações no banco");
+        }
+        
     }
 }

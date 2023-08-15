@@ -117,5 +117,12 @@ namespace CurriculumWebAPI.App.Controllers
             
         }
 
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpDelete("id")]
+        public async Task<ActionResult> DeleteById(int id)
+        {
+
+        }
     }
 }

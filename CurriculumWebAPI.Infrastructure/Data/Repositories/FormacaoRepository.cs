@@ -49,13 +49,13 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return result > 0 ? true : false;
         }
 
-        public async Task<bool> DeleteA(Formacao entity)
+        public async Task<int> Delete(Formacao entity)
         {
             _context.Formacao.Remove(entity);
 
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
 
-            return true;
+            return result;
         }
 
 
