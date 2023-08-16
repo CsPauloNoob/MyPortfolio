@@ -55,10 +55,7 @@ namespace CurriculumWebAPI.App.MapperConfig
             .ForMember(dest => dest.Cidade, opt => opt.MapFrom(src => src.Endereco.Cidade))
             .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Endereco.Estado));
 
-
-
-            /*CreateMap<FormacaoInputModel, Formacao>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore());*/
+            #region Formacao Mappper
 
             CreateMap<FormacaoInputModel, Formacao>()
             .ForMember(dest => dest.AnoConclusao, opt => opt.MapFrom(src => int.Parse(src.AnoConclusao)))
@@ -69,11 +66,17 @@ namespace CurriculumWebAPI.App.MapperConfig
 
             CreateMap<Formacao, FormacaoViewModel>();
 
-           /* CreateMap<FormacaoViewModel, Formacao>()
-            .ForMember(dest => dest.AnoConclusao, opt => opt.MapFrom(src => int.Parse(src.AnoConclusao)))
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.CurriculumId, opt => opt.Ignore())
-            .ForMember(dest => dest.Curriculum, opt => opt.Ignore());*/
+            #endregion
+
+
+
+            CreateMap<HabilidadeInputModel, Habilidades>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CurriculumId, opt => opt.Ignore())
+                .ForMember(dest => dest.Curriculum, opt => opt.Ignore());
+
+
+            CreateMap<Habilidades, HabilidadeViewModel>();
         }
     }
 }

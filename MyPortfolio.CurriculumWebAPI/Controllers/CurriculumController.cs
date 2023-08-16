@@ -15,7 +15,7 @@ using System.Security.Claims;
 namespace CurriculumWebAPI.App.Controllers
 {
     [ApiController]
-    [Route("V1/[controller]")]
+    [Route("V1/api/[controller]")]
     public class CurriculumController : ControllerBase
     {
         private readonly Mapper _mapper;

@@ -14,7 +14,7 @@ namespace CurriculumWebAPI.App.Controllers
 {
 
     [ApiController]
-    [Route("V1/[controller]")]
+    [Route("V1/api/[controller]")]
     public class AuthenticateUserController : ControllerBase
     {
         private readonly Mapper _mapper;

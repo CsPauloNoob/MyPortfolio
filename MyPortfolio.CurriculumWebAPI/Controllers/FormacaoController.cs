@@ -12,7 +12,7 @@ using System.ComponentModel;
 namespace CurriculumWebAPI.App.Controllers
 {
     [ApiController]
-    [Route("V1/[controller]")]
+    [Route("V1/api/[controller]")]
     public class FormacaoController : ControllerBase
     {
         private readonly FormacaoService _formacaoService;

@@ -45,6 +45,7 @@ namespace CurriculumWebAPI.DI
 
             services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
             services.AddScoped(typeof(IRepositoryForCollections<Formacao>), typeof(FormacaoRepository));
+            services.AddScoped(typeof(IRepositoryForCollections<Habilidades>), typeof(HabilidadeRepository));
             services.AddScoped(typeof(IRepository<User>), typeof(UserRepository));
             services.AddScoped(typeof(IRepository<Contato>), typeof(ContatoRepository));
             services.AddScoped(typeof(IUserIdentity), typeof(UserIdentity));
@@ -55,6 +56,7 @@ namespace CurriculumWebAPI.DI
             services.AddTransient(typeof(UserService));
             services.AddTransient(typeof(CurriculumService));
             services.AddTransient(typeof(FormacaoService));
+            services.AddTransient(typeof(HabilidadeService));
             services.AddTransient(typeof(PdfService));
 
             services.AddTransient(typeof(Mapper));
