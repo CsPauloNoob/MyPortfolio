@@ -1,10 +1,12 @@
-﻿using CurriculumWebAPI.Domain.Interfaces;
+﻿using CurriculumWebAPI.Domain.Exceptions;
+using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using CurriculumWebAPI.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,20 +38,30 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<Habilidades>> GetAllByCurriculumId(string curriculumId)
+        public async Task<List<Habilidades>> GetAllByCurriculumId(string curriculumId)
         {
-            throw new NotImplementedException();
+            var queryResult =_context.
+                Habilidades.Where(f => f.CurriculumId == curriculumId);
+
+            return queryResult.ToList();
         }
 
-        public Task<Habilidades> GetById(int id)
+        public async Task<Habilidades> GetById(int id)
         {
-            throw new NotImplementedException();
+            var result = await _context.Habilidades.FindAsync(id);
+
+            return result;
         }
 
         public async Task<string> GetCurriculumId(string email)
         {
             var user = await _context.Users.Include(c => c.Curriculum)
                 .FirstOrDefaultAsync(c => c.Email == email);
+
+
+            //APLICAR ESTE MODELO PARA OS SEGUINTES REPOS
+            if(user.Curriculum is null)
+                throw new NotFoundInDatabaseException("Id do curriculo não encontrado no banco");
 
             return user.Curriculum.Id;
         }

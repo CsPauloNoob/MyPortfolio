@@ -2,6 +2,7 @@
 using CurriculumWebAPI.App.Extensions;
 using CurriculumWebAPI.App.InputModels;
 using CurriculumWebAPI.App.ViewModels;
+using CurriculumWebAPI.Domain.Exceptions;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using CurriculumWebAPI.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CurriculumWebAPI.App.Controllers
 {
-    [Route("V1/api/[controller]")]
+    [Route("V1/api/habilidade")]
     [ApiController]
     public class HabilidadesController : ControllerBase
     {
@@ -22,21 +23,59 @@ namespace CurriculumWebAPI.App.Controllers
             _habilidadeService = habilidadeService;
             _mapper = mapper;
         }
-        
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<List<HabilidadeViewModel>>> Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                string email = await this.GetEmailFromUser();
+
+                var habilidade = _mapper.Map<List<HabilidadeViewModel>>(
+                    await _habilidadeService.GetAllByEmail(email));
+
+                return Ok(habilidade);
+            }
+
+            catch(NotFoundInDatabaseException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<HabilidadeViewModel>> Get(int id)
         {
-            return "value";
+            try
+            {
+                string email = await this.GetEmailFromUser();
+
+                var habilidadeViewModel = _mapper
+                    .Map<HabilidadeViewModel>(await _habilidadeService.GetById(id, email));
+
+                return Ok(habilidadeViewModel);
+            }
+
+            catch(NotFoundInDatabaseException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        //CORRIGIR FORMACAO PARA ESTE MODELO
+
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]

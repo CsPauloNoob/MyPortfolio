@@ -13,13 +13,21 @@ namespace CurriculumWebAPI.Domain.Services
             _repository = repository;
         }
 
-        public async Task<bool> AddFormacao(Formacao formacao, string curriculumId)
+        public async Task<bool> AddFormacao(Formacao[] formacoes, string email)
         {
+            var curriculumId = await _repository.GetCurriculumId(email);
+            int result = 0;
 
-            formacao.CurriculumId = curriculumId;
-            var result = await _repository.AddNew(formacao);
+            if (curriculumId is null)
+                throw new DirectoryNotFoundException("Curriculo não encontrado no banco");
 
-            if (result > 0)
+            foreach (var item in formacoes)
+            {
+                item.CurriculumId = curriculumId;
+                result += await _repository.AddNew(item);
+            }
+
+            if (result == formacoes.Count())
                 return true;
 
             return false;
@@ -28,6 +36,9 @@ namespace CurriculumWebAPI.Domain.Services
         public async Task<List<Formacao>> GetAllByEmail(string email)
         {
             var curricculumId = await _repository.GetCurriculumId(email);
+
+            if (curricculumId is null)
+                throw new NotFoundInDatabaseException("Id do curriculo não encontrado no banco");
 
             var formationList = await _repository.GetAllByCurriculumId(curricculumId);
 
@@ -68,7 +79,7 @@ namespace CurriculumWebAPI.Domain.Services
                throw new SaveFailedException("Erro ao salvar módulo de formação no banco!");
         }
 
-
+        //PROBLEMA DE SEGURANÇA
         public async Task<bool> DeleteFormacao(int id)
         {
             var existingFormacao = await _repository.GetById(id);

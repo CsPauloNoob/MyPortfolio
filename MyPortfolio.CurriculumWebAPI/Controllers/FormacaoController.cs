@@ -36,15 +36,13 @@ namespace CurriculumWebAPI.App.Controllers
             {
                 var email = await this.GetEmailFromUser();
 
-                var curriculum = await _curriculumService.GetByEmail(email);
+                var result = await _formacaoService.AddFormacao(
+                    _mapper.Map<Formacao[]>(formacaoInputModel), email);
 
-                foreach (var formacao in formacaoInputModel)
-                {
-                    await _formacaoService.
-                        AddFormacao(_mapper.Map<Formacao>(formacao), curriculum.Id);
-                }
+                if (result)
+                    return CreatedAtAction(nameof(Get), formacaoInputModel);
 
-                return CreatedAtAction(nameof(Get), formacaoInputModel);
+                else return StatusCode(500, "Erro desconhecido");
             }
 
             catch (NotFoundInDatabaseException ex)
