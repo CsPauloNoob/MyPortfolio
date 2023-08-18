@@ -100,17 +100,84 @@ namespace CurriculumWebAPI.App.Controllers
             }
         }
 
-        // PUT api/<HabilidadesController>/5
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(int id, HabilidadeInputModel habilidadeInputModel)
         {
+            try
+            {
+                var email = await this.GetEmailFromUser();
 
+                var result = await _habilidadeService.UpdateById
+                    (id, email, _mapper.Map<Habilidades>(habilidadeInputModel));
+
+                if(result)
+                    return CreatedAtAction(nameof(Put), habilidadeInputModel);
+
+                else return BadRequest();
+
+            }
+
+            catch(NotFoundInDatabaseException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
-        // DELETE api/<HabilidadesController>/5
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            try
+            {
+                string email = await this.GetEmailFromUser();
+
+                var result = await _habilidadeService.DeleteById(id, email);
+
+                if(result)
+                    return NoContent();
+
+                else
+                    return BadRequest();
+            }
+
+            catch (NotFoundInDatabaseException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteAll()
+        {
+            try
+            {
+                string email = await this.GetEmailFromUser();
+
+                var result = await _habilidadeService.DeleteAllItems(email);
+
+                if(result)
+                    return NoContent();
+
+                else return BadRequest();
+            }
+
+            catch (NotFoundInDatabaseException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

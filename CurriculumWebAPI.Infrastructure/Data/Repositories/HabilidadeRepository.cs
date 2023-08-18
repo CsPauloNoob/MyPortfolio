@@ -28,14 +28,22 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public Task<int> DeleteAllItems(Habilidades[] entities)
+        public async Task<int> DeleteAllItems(Habilidades[] entities)
         {
-            throw new NotImplementedException();
+            _context.Habilidades.RemoveRange(entities);
+
+            var result = await _context.SaveChangesAsync();
+
+            return result;
         }
 
-        public Task<int> DeleteByItem(Habilidades entity)
+        public async Task<int> DeleteByItem(Habilidades entity)
         {
-            throw new NotImplementedException();
+            _context.Habilidades.Remove(entity);
+
+            var result = await _context.SaveChangesAsync();
+
+            return result;
         }
 
         public async Task<List<Habilidades>> GetAllByCurriculumId(string curriculumId)
@@ -58,17 +66,19 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             var user = await _context.Users.Include(c => c.Curriculum)
                 .FirstOrDefaultAsync(c => c.Email == email);
 
-
-            //APLICAR ESTE MODELO PARA OS SEGUINTES REPOS
             if(user.Curriculum is null)
                 throw new NotFoundInDatabaseException("Id do curriculo não encontrado no banco");
 
             return user.Curriculum.Id;
         }
 
-        public Task<bool> Update(Habilidades entity)
+        public async Task<bool> Update(Habilidades entity)
         {
-            throw new NotImplementedException();
+            _context.Habilidades.Update(entity);
+
+            var result = await _context.SaveChangesAsync();
+
+            return result > 0 ? true : false;
         }
     }
 }

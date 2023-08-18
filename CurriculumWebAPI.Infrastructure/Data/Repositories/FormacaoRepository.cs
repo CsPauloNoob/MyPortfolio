@@ -59,11 +59,13 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
         }
 
 
-
         public async Task<string> GetCurriculumId(string email)
         {
             var user = await _context.Users.Include(c => c.Curriculum)
                 .FirstOrDefaultAsync(c => c.Email == email);
+
+            if (user.Curriculum is null)
+                throw new NotFoundInDatabaseException("Id do curriculo não encontrado no banco");
 
             return user.Curriculum.Id;
 

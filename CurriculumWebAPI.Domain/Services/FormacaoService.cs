@@ -58,7 +58,7 @@ namespace CurriculumWebAPI.Domain.Services
                 throw new NotFoundInDatabaseException("Objeto não encontrado no banco de dados!");
 
             else if (dbFormacao.CurriculumId != curriculumId)
-                throw new NotFoundInDatabaseException("id errado ou usuário não cadastrou um curriculo");
+                throw new NotFoundInDatabaseException("id incorreto ou usuário não cadastrou um curriculo");
 
             #region Validações ruins
 
@@ -80,11 +80,13 @@ namespace CurriculumWebAPI.Domain.Services
         }
 
         //PROBLEMA DE SEGURANÇA
-        public async Task<bool> DeleteFormacao(int id)
+        public async Task<bool> DeleteFormacao(int id, string email)
         {
+            var curriculumId = await _repository.GetCurriculumId(email);
+
             var existingFormacao = await _repository.GetById(id);
 
-            if (existingFormacao is null)
+            if (existingFormacao is null || curriculumId != existingFormacao.CurriculumId)
                 throw new NotFoundInDatabaseException("Objeto não encontrado no banco");
 
             var result =await _repository.DeleteByItem(existingFormacao);

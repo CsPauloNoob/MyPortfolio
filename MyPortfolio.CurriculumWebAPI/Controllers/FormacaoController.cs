@@ -122,14 +122,21 @@ namespace CurriculumWebAPI.App.Controllers
         {
             try
             {
-                await _formacaoService.DeleteFormacao(id);
+                var email = await this.GetEmailFromUser();
+
+                await _formacaoService.DeleteFormacao(id, email);
 
                 return Ok();
             }
 
-            catch(Exception ex)
+            catch(NotFoundInDatabaseException ex)
             {
                 return NotFound(ex.Message);
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500,ex.Message);
             }
         }
 
