@@ -26,7 +26,7 @@ namespace CurriculumWebAPI.App.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
-        public async Task<ActionResult<List<HabilidadeViewModel>>> Get()
+        public async Task<ActionResult<List<HabilidadeViewModel>>> GetAll()
         {
             try
             {
@@ -123,6 +123,7 @@ namespace CurriculumWebAPI.App.Controllers
                 return NotFound(ex.Message);
             }
         }
+
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpDelete("{id}")]

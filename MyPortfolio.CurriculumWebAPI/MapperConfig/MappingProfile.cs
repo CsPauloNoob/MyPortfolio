@@ -69,7 +69,7 @@ namespace CurriculumWebAPI.App.MapperConfig
             #endregion
 
 
-
+            #region habilidades Mapper
             CreateMap<HabilidadeInputModel, Habilidades>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CurriculumId, opt => opt.Ignore())
@@ -77,6 +77,19 @@ namespace CurriculumWebAPI.App.MapperConfig
 
 
             CreateMap<Habilidades, HabilidadeViewModel>();
+
+            #endregion
+
+
+            #region Cursos Extra Mapper
+            CreateMap<CursosExtraInputModel, Cursos_Extras>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.CurriculumId, opt => opt.Ignore())
+            .ForMember(dest => dest.Curriculum, opt => opt.Ignore());
+
+            CreateMap<Cursos_Extras, CursosExtraViewModel>();
+
+            #endregion
         }
     }
 }

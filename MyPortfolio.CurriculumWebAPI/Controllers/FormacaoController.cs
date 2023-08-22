@@ -12,7 +12,7 @@ using System.ComponentModel;
 namespace CurriculumWebAPI.App.Controllers
 {
     [ApiController]
-    [Route("V1/api/[controller]")]
+    [Route("V1/api/formacao")]
     public class FormacaoController : ControllerBase
     {
         private readonly FormacaoService _formacaoService;
@@ -49,8 +49,6 @@ namespace CurriculumWebAPI.App.Controllers
             {
                 return NotFound(ex.Message);
             }
-
-            return BadRequest("Não foi possível salvar no banco");
         }
 
 

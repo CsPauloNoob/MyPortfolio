@@ -71,6 +71,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
         }
 
+
         public async Task<int> DeleteAllItems(Formacao[] formacao)
         {
             _context.Formacao.RemoveRange(formacao);
