@@ -3,7 +3,7 @@ using CurriculumWebAPI.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace CurriculumWebAPI.Infrastructure.IdentityConfiguration
+namespace CurriculumWebAPI.Infrastructure.IdentityConfigs
 {
     public class ApplicationUser : IdentityUser
     {

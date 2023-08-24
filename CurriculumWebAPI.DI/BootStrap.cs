@@ -4,7 +4,6 @@ using CurriculumWebAPI.Domain.Services;
 using CurriculumWebAPI.Infrastructure.Data.Context;
 using CurriculumWebAPI.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -12,10 +11,10 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using CurriculumWebAPI.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
-using CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth;
 using CurriculumWebAPI.Infrastructure.IdentityConfigs.IdentityAuth;
 using CurriculumWebAPI.Infrastructure.PDF;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
+using CurriculumWebAPI.Infrastructure.IdentityConfigs;
 
 namespace CurriculumWebAPI.DI
 {
@@ -47,6 +46,7 @@ namespace CurriculumWebAPI.DI
             services.AddScoped(typeof(IRepositoryForCollections<Formacao>), typeof(FormacaoRepository));
             services.AddScoped(typeof(IRepositoryForCollections<Habilidades>), typeof(HabilidadeRepository));
             services.AddScoped(typeof(IRepositoryForCollections<Cursos_Extras>), typeof(CursosExtrasRepository));
+            services.AddScoped(typeof(IRepositoryForCollections<Experiencia_Profissional>), typeof(ExperienciaProfissionalRepository));
             services.AddScoped(typeof(IRepository<User>), typeof(UserRepository));
             services.AddScoped(typeof(IRepository<Contato>), typeof(ContatoRepository));
             services.AddScoped(typeof(IUserIdentity), typeof(UserIdentity));
@@ -59,6 +59,7 @@ namespace CurriculumWebAPI.DI
             services.AddTransient(typeof(FormacaoService));
             services.AddTransient(typeof(HabilidadeService));
             services.AddTransient(typeof(CursosExtrasService));
+            services.AddTransient(typeof(ExperienciaProfissionalService));
             services.AddTransient(typeof(PdfService));
 
             services.AddTransient(typeof(Mapper));

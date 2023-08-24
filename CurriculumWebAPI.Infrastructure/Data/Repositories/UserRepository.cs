@@ -2,7 +2,7 @@
 using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Infrastructure.Data.Context;
-using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
+using CurriculumWebAPI.Infrastructure.IdentityConfigs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;

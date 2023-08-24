@@ -11,6 +11,9 @@ namespace CurriculumWebAPI.App.MapperConfig
     {
         public MappingProfile()
         {
+
+            #region Curriculum Mapper
+
             CreateMap<CurriculumInputModel, Curriculum>()
                 .ForMember(c => c.Habilidade, opt => opt.Ignore())
                 .ForMember(c => c.Formacao, opt => opt.Ignore())
@@ -42,7 +45,9 @@ namespace CurriculumWebAPI.App.MapperConfig
 
 
             CreateMap<Curriculum, CurriculumViewModel>();
+            #endregion
 
+            #region Contato Mapper
             //CreateMap<Contato, ContatoViewModel>();
 
             CreateMap<Contato, ContatoViewModel>()
@@ -54,6 +59,9 @@ namespace CurriculumWebAPI.App.MapperConfig
             .ForMember(dest => dest.Rua, opt => opt.MapFrom(src => src.Endereco.Rua))
             .ForMember(dest => dest.Cidade, opt => opt.MapFrom(src => src.Endereco.Cidade))
             .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Endereco.Estado));
+
+            #endregion
+
 
             #region Formacao Mappper
 
@@ -89,6 +97,16 @@ namespace CurriculumWebAPI.App.MapperConfig
 
             CreateMap<Cursos_Extras, CursosExtraViewModel>();
 
+            #endregion
+
+
+            #region Experiencia Profissional Mapper
+            CreateMap<ExpProfissionalInputModel, Experiencia_Profissional>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.CurriculumId, opt => opt.Ignore())
+            .ForMember(dest => dest.Curriculum, opt => opt.Ignore());
+
+            CreateMap<Experiencia_Profissional, ExpProfissionalViewModel>();
             #endregion
         }
     }

@@ -1,6 +1,5 @@
 ﻿using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Domain.Services;
-using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

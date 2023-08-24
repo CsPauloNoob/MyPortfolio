@@ -11,29 +11,31 @@ using Microsoft.AspNetCore.Mvc;
 namespace CurriculumWebAPI.App.Controllers
 {
 
-    [Route("V1/api/cursos_extras")]
+    [Route("V1/api/exp_profissional")]
     [ApiController]
-    public class CursosExtraController : ControllerBase
+    public class ExperienciaProfissionalController : ControllerBase
     {
-        private readonly CursosExtrasService _cursosExtrasService;
         private readonly Mapper _mapper;
+        private readonly ExperienciaProfissionalService _expProfissionalService;
 
-        public CursosExtraController(CursosExtrasService cursosExtrasService, Mapper mapper)
+
+        public ExperienciaProfissionalController(Mapper mapper, 
+            ExperienciaProfissionalService expProfissional)
         {
-            _cursosExtrasService = cursosExtrasService;
             _mapper = mapper;
+            _expProfissionalService = expProfissional;
         }
 
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<ActionResult> Post(CursosExtraInputModel[] cursosExtraInputModel)
+        public async Task<ActionResult> Post(ExpProfissionalInputModel[] cursosExtraInputModel)
         {
             try
             {
                 var email = await this.GetEmailFromUser();
-                var result = await _cursosExtrasService.AddCursosExtras(
-                    _mapper.Map<Cursos_Extras[]>(cursosExtraInputModel), email);
+                var result = await _expProfissionalService.AddExpProfissional(
+                    _mapper.Map<Experiencia_Profissional[]>(cursosExtraInputModel), email);
 
                 if (result)
                     return CreatedAtAction(nameof(Post), cursosExtraInputModel);
@@ -55,16 +57,16 @@ namespace CurriculumWebAPI.App.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
-        public async Task<ActionResult<List<CursosExtraViewModel>>> GetAll()
+        public async Task<ActionResult<List<ExpProfissionalViewModel>>> GetAll()
         {
             try
             {
                 string email = await this.GetEmailFromUser();
 
-                var cursosExtras = _mapper.Map<List<CursosExtraViewModel>>(
-                    await _cursosExtrasService.GetAllByEmail(email));
+                var expProfissional = _mapper.Map<List<ExpProfissionalViewModel>>(
+                    await _expProfissionalService.GetAllByEmail(email));
 
-                return Ok(cursosExtras);
+                return Ok(expProfissional);
             }
 
             catch (NotFoundInDatabaseException ex)
@@ -81,16 +83,16 @@ namespace CurriculumWebAPI.App.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<CursosExtraViewModel>> GetById(int id)
+        public async Task<ActionResult<ExpProfissionalViewModel>> GetById(int id)
         {
             try
             {
                 string email = await this.GetEmailFromUser();
 
-               var cursoExtras = _mapper.Map<CursosExtraViewModel>(
-                   await _cursosExtrasService.GetById(id, email));
+                var expProfissional = _mapper.Map<ExpProfissionalViewModel>(
+                    await _expProfissionalService.GetById(id, email));
 
-                return Ok(cursoExtras);
+                return Ok(expProfissional);
             }
 
             catch (NotFoundInDatabaseException ex)
@@ -107,14 +109,16 @@ namespace CurriculumWebAPI.App.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<CursosExtraViewModel>> Put(int id, CursosExtraInputModel cursosExtraInputModel)
+        public async Task<ActionResult<ExpProfissionalViewModel>> Put
+            (int id, ExpProfissionalInputModel cursosExtraInputModel)
         {
             try
             {
                 var email = await this.GetEmailFromUser();
 
-                var result = await _cursosExtrasService.UpdateById
-                    (id, email, _mapper.Map<Cursos_Extras>(cursosExtraInputModel));
+                var result = await _expProfissionalService.UpdateById
+                    (id, email, _mapper.Map<Experiencia_Profissional>
+                    (cursosExtraInputModel));
 
                 if (result)
                     return CreatedAtAction(nameof(Put), cursosExtraInputModel);
@@ -128,7 +132,7 @@ namespace CurriculumWebAPI.App.Controllers
                 return NotFound(ex.Message);
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
@@ -143,7 +147,7 @@ namespace CurriculumWebAPI.App.Controllers
             {
                 string email = await this.GetEmailFromUser();
 
-                var result = await _cursosExtrasService.DeleteAllItems(email);
+                var result = await _expProfissionalService.DeleteAllItems(email);
 
                 if (result)
                     return NoContent();
@@ -171,7 +175,7 @@ namespace CurriculumWebAPI.App.Controllers
             {
                 string email = await this.GetEmailFromUser();
 
-                var result = await _cursosExtrasService.DeleteById(id, email);
+                var result = await _expProfissionalService.DeleteById(id, email);
 
                 if (result)
                     return NoContent();

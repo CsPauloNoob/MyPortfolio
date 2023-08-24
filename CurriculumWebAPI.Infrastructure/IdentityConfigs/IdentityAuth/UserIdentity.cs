@@ -2,7 +2,7 @@
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Domain.Services;
 using CurriculumWebAPI.Infrastructure.Data.Context;
-using CurriculumWebAPI.Infrastructure.IdentityConfigs.IdentityAuth;
+using CurriculumWebAPI.Infrastructure.IdentityConfigs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,7 +10,7 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
 
-namespace CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth
+namespace CurriculumWebAPI.Infrastructure.IdentityConfigs.IdentityAuth
 {
     public class UserIdentity : IUserIdentity
     {
@@ -19,8 +19,8 @@ namespace CurriculumWebAPI.Infrastructure.IdentityConfiguration.IdentityAuth
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly TokenGenerator _tokenGenerator;
 
-        public UserIdentity(SignInManager<ApplicationUser> signInManager, 
-            UserManager<ApplicationUser> userManager, 
+        public UserIdentity(SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
             MyContext context, TokenGenerator tokenGenerator)
         {
             _context = context;

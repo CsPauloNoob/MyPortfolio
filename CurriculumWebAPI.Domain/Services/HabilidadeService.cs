@@ -58,7 +58,7 @@ namespace CurriculumWebAPI.Domain.Services
             var habilidade = await _repository.GetById(id);
 
             if (habilidade is null)
-                throw new NotFoundInDatabaseException("id não corresponde a nenhum mobjeto no banco");
+                throw new NotFoundInDatabaseException("id não corresponde a nenhum objeto no banco");
 
             var curriculumId = await _repository.GetCurriculumId(email);
 

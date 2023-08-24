@@ -2,9 +2,9 @@
 using CurriculumWebAPI.Domain.Models.ComplexTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using CurriculumWebAPI.Infrastructure.IdentityConfiguration;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using System.Runtime.Loader;
+using CurriculumWebAPI.Infrastructure.IdentityConfigs;
 
 namespace CurriculumWebAPI.Infrastructure.Data.Context
 {
