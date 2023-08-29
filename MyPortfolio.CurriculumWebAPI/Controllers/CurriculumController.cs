@@ -36,14 +36,14 @@ namespace CurriculumWebAPI.App.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> HeaderGet()
         {
             try
             {
                 var email = await this.GetEmailFromUser();
-                var curriculum = await _curriculoService.GetByEmail(email);
+                var curriculum = await _curriculoService.GetHeaderByEmail(email);
 
-                return Ok(_mapper.Map<CurriculumViewModel>(curriculum));
+                return Ok(_mapper.Map<CurriculumHeaderVM>(curriculum));
             }
 
             catch (NotFoundInDatabaseException ex)
@@ -54,8 +54,8 @@ namespace CurriculumWebAPI.App.Controllers
 
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPost()]
-        public async Task<IActionResult> Post(CurriculumInputModel curriculum)
+        [HttpPost]
+        public async Task<IActionResult> HeaderPost(CurriculumHeaderIM curriculum)
         {
 
             var email = await this.GetEmailFromUser();
@@ -64,7 +64,7 @@ namespace CurriculumWebAPI.App.Controllers
             {
                 var mapped = _mapper.Map<Curriculum>(curriculum);
 
-                var curriculoResult = await _curriculoService.Save(mapped, email);
+                var curriculoResult = await _curriculoService.HeaderSave(mapped, email);
                 //Recupera user para vincular curriculo novo
                 var user = await _userService.GetUserByEmail(email);
 
@@ -74,7 +74,7 @@ namespace CurriculumWebAPI.App.Controllers
                 var updateResult = await _userService.UpdateUser(user);
 
                 if (updateResult)
-                    return CreatedAtAction(nameof(Post), "Curriculum criado com sucesso!");
+                    return CreatedAtAction(nameof(HeaderPost), "Curriculum criado com sucesso!");
             }
 
             catch (NotFoundInDatabaseException ex)
@@ -83,6 +83,35 @@ namespace CurriculumWebAPI.App.Controllers
             }
 
             return BadRequest("Erro ao salvar curriculo");
+        }
+
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPut()]
+        public async Task<IActionResult> HeaderPut(CurriculumHeaderIM curriculum)
+        {
+            try
+            {
+                var email = await this.GetEmailFromUser();
+
+                var result = await _curriculoService.HeaderUpdate(
+                    _mapper.Map<Curriculum>(curriculum), email);
+
+                if (result)
+                    return CreatedAtAction(nameof(HeaderPut), curriculum);
+
+                return BadRequest();
+            }
+
+            catch (NotFoundInDatabaseException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
 
@@ -119,19 +148,19 @@ namespace CurriculumWebAPI.App.Controllers
 
                     return CreatedAtAction(nameof(
                         _curriculoService.AddContato), contatoInputModel);
+
+                return BadRequest();
             }
 
             catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
-
-            return BadRequest("Não foi possível salvar!");
 
         }
 
 
-        // --> Modelo de implementação
+        
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("contato")]
         public async Task<IActionResult> GetContato()
@@ -148,6 +177,11 @@ namespace CurriculumWebAPI.App.Controllers
             catch (NotFoundInDatabaseException ex)
             {
                 return BadRequest(ex.Message);
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -177,6 +211,11 @@ namespace CurriculumWebAPI.App.Controllers
             catch (NotFoundInDatabaseException ex)
             {
                 return NotFound(ex.Message);
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 

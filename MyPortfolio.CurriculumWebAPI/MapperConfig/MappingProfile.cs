@@ -14,7 +14,7 @@ namespace CurriculumWebAPI.App.MapperConfig
 
             #region Curriculum Mapper
 
-            CreateMap<CurriculumInputModel, Curriculum>()
+            CreateMap<CurriculumHeaderIM, Curriculum>()
                 .ForMember(c => c.Habilidade, opt => opt.Ignore())
                 .ForMember(c => c.Formacao, opt => opt.Ignore())
                 .ForMember(c => c.Cursos, opt => opt.Ignore())
@@ -44,7 +44,7 @@ namespace CurriculumWebAPI.App.MapperConfig
             }));
 
 
-            CreateMap<Curriculum, CurriculumViewModel>();
+            CreateMap<Curriculum, CurriculumHeaderVM>();
             #endregion
 
             #region Contato Mapper

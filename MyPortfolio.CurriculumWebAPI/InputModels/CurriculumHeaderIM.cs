@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CurriculumWebAPI.App.InputModels
 {
-    public class CurriculumInputModel
+    public class CurriculumHeaderIM
     {
 
         [MaxLength(60)]
@@ -15,9 +15,5 @@ namespace CurriculumWebAPI.App.InputModels
         public string SobreMim { get; set; }
 
         public DateTime DataCriacao { get; set; }
-
-        public ContatoViewModel Contato { get; set; }
-
-        public FormacaoViewModel Formacao { get; set; }
     }
 }

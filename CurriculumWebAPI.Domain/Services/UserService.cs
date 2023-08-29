@@ -75,11 +75,7 @@ namespace CurriculumWebAPI.Domain.Services
         {
             var result = await _reposity.Update(user);
 
-            if (result is not null)
-                return true;
-
-            else return false;
+            return result;
         }
-
     }
 }

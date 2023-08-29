@@ -83,7 +83,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
 
         // ----> Melhorar
-        public async Task<User> Update(User entity)
+        public async Task<bool> Update(User entity)
         {
             var newUser = _context.Users.Find(entity.Id);
 
@@ -92,9 +92,9 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
                 newUser.Curriculum = entity.Curriculum;
 
                 _context.Users.Update(newUser);
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync();
 
-                return entity;
+                return result>1?true:false;
             }
 
             else throw new NotFoundInDatabaseException("");

@@ -55,9 +55,13 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<Curriculum> Update(Curriculum entity)
+        public async Task<bool> Update(Curriculum entity)
         {
-            return null;
+            _context.Curriculum.Update(entity);
+
+            var result = await _context.SaveChangesAsync();
+
+            return result > 0 ? true : false;
         }
     }
 }

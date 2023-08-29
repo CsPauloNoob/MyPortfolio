@@ -21,7 +21,7 @@ namespace CurriculumWebAPI.Domain.Services
             _contatoRepository = contatoRepository;
         }
 
-        public async Task<Curriculum> GetByEmail(string email)
+        public async Task<Curriculum> GetHeaderByEmail(string email)
         {
 
             var result = await _curriculumRepository.GetByEmail(email);
@@ -34,7 +34,7 @@ namespace CurriculumWebAPI.Domain.Services
         }
 
 
-        public async Task<Curriculum> Save(Curriculum curriculum, string emailUser)
+        public async Task<Curriculum> HeaderSave(Curriculum curriculum, string emailUser)
         {
             var isNew = await IsNewCurriculum(emailUser);
 
@@ -47,6 +47,33 @@ namespace CurriculumWebAPI.Domain.Services
             }
 
             throw new SaveFailedException("Erro ao salvar curriculo");
+        }
+
+
+        public async Task<bool> HeaderUpdate(Curriculum curriculum, string email)
+        {
+            var existingCurriculum = await _curriculumRepository.GetByEmail(email);
+
+            if (existingCurriculum is null)
+                throw new NotFoundInDatabaseException("Objeto não encontrado no banco de dados!");
+
+            #region Validações ruins
+
+            if (existingCurriculum.Nome != curriculum.Nome)
+                existingCurriculum.Nome = curriculum.Nome;
+
+            if (existingCurriculum.SobreMim != curriculum.SobreMim)
+                existingCurriculum.SobreMim = curriculum.SobreMim;
+
+            if (existingCurriculum.PerfilProgramador != curriculum.PerfilProgramador)
+                existingCurriculum.PerfilProgramador = curriculum.PerfilProgramador;
+
+            #endregion
+
+            if (await _curriculumRepository.Update(existingCurriculum))
+                return true;
+            else
+                throw new SaveFailedException("Erro ao salvar módulo de formação no banco!");
         }
 
 

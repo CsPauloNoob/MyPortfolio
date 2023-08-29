@@ -47,13 +47,13 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return Task.FromResult(contato);
         }
 
-        public async Task<Contato> Update(Contato contato)
+        public async Task<bool> Update(Contato contato)
         {
-            var result = _context.Contato.Update(contato);
+            _context.Contato.Update(contato);
 
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
 
-            return contato;
+            return result > 0 ? true : false;
         }
     }
 }

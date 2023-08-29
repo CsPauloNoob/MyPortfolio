@@ -2,7 +2,7 @@
 
 namespace CurriculumWebAPI.App.ViewModels
 {
-    public class CurriculumViewModel
+    public class CurriculumHeaderVM
     {
         public string Nome { get; set; }
 
