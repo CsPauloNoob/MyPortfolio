@@ -23,7 +23,7 @@ namespace CurriculumWebAPI.Domain.Services
         {
             var curriculum = await _repository.GetById("1");
 
-            var pdfFile = await _pdfGenerator.Create(curriculum);
+            var pdfFile = await _pdfGenerator.Generate(curriculum);
 
             return pdfFile;
         }

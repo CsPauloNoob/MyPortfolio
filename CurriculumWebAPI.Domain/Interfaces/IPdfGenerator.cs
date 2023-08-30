@@ -9,6 +9,6 @@ namespace CurriculumWebAPI.Domain.Interfaces
 {
     public interface IPdfGenerator
     {
-        public Task<string> Create(Curriculum curriculum);
+        public Task<string> Generate(Curriculum curriculum);
     }
 }

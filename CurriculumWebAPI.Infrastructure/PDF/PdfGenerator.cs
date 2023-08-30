@@ -1,28 +1,58 @@
 ﻿using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Domain.Interfaces;
-using UglyToad.PdfPig.Content;
-using UglyToad.PdfPig.Core;
-using UglyToad.PdfPig.Fonts.Standard14Fonts;
-using UglyToad.PdfPig.Writer;
+using iText.Kernel;
+using System;
 
 namespace CurriculumWebAPI.Infrastructure.PDF
 {
     public class PdfGenerator : IPdfGenerator
     {
-        public async Task<string> Create(Curriculum curriculum)
+
+        private string PdfFolderPath = 
+            Path.Combine(Environment.CurrentDirectory, "PDFs");
+
+
+
+        public async Task<string> Generate(Curriculum curriculum)
         {
-            PdfDocumentBuilder builder = new PdfDocumentBuilder();
+            CreatePdfFolder();
+            
+            CreateHeader(curriculum);
 
-            PdfPageBuilder page = builder.AddPage(PageSize.A4);
+            var filePath = PathCombiner(Guid.NewGuid().ToString(), ".pdf");
 
-            // Fonts must be registered with the document builder prior to use to prevent duplication.
-            PdfDocumentBuilder.AddedFont font = builder.AddStandard14Font(Standard14Font.TimesRoman);
+            return filePath;
+        }
 
-            page.AddText("Hello World!", 12, new PdfPoint(25, 700), font);
 
-            byte[] documentBytes = builder.Build();
+        void CreateHeader(Curriculum curriculum)
+        {
+        }
 
-            return null;
+
+
+
+
+        void CreatePdfFolder()
+        {
+            if(!Directory.Exists(PdfFolderPath))
+            {
+                Directory.CreateDirectory(PdfFolderPath);
+            }
+        }
+
+        string PathCombiner(string filePath)
+        {
+            var path = Path.Combine(PdfFolderPath, filePath);
+
+            return path;
+        }
+
+        string PathCombiner(string filePath, string extension)
+        {
+            var path = Path.Combine(PdfFolderPath, filePath+extension);
+
+            return path;
         }
     }
 }
