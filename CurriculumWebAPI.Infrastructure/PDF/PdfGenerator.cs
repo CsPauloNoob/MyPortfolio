@@ -2,6 +2,13 @@
 using CurriculumWebAPI.Domain.Interfaces;
 using iText.Kernel;
 using System;
+using iText.IO.Font;
+using iText.Kernel.Pdf;
+using iText.Kernel.Font;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.IO.Font.Constants;
+using iText.Layout.Properties;
 
 namespace CurriculumWebAPI.Infrastructure.PDF
 {
@@ -16,17 +23,27 @@ namespace CurriculumWebAPI.Infrastructure.PDF
         public async Task<string> Generate(Curriculum curriculum)
         {
             CreatePdfFolder();
-            
-            CreateHeader(curriculum);
-
             var filePath = PathCombiner(Guid.NewGuid().ToString(), ".pdf");
+            File.Create(filePath).Close();
+
+            PdfWriter writer = new PdfWriter(filePath);
+            var pdf = new PdfDocument(writer);
+            var document = new Document(pdf);
+
+            CreateHeader(curriculum, document);
 
             return filePath;
         }
 
-
-        void CreateHeader(Curriculum curriculum)
+        void CreateHeader(Curriculum curriculum, Document doc)
         {
+            doc.SetTextAlignment(TextAlignment.CENTER);
+            
+            doc.SetUnderline();
+            doc.Add(new Paragraph("Paulin").SetFont(
+                PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN)).SetFontSize(20));
+            doc.Add(new Paragraph("Celola").SetMarginLeft(35));
+            doc.Close();
         }
 
 
