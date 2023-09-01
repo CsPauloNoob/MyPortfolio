@@ -33,7 +33,12 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
         public async Task<Curriculum> GetById(string id)
         {
-            var curriculo = _context.Curriculum.Find(id);
+            var curriculo = _context.Curriculum.Include
+                (c => c.Experiencia_Profissional).Include
+                (c => c.Cursos).Include(c => c.Habilidade).Include
+                (c => c.Contato).Include
+                (c => c.Formacao).FirstOrDefault
+                (c => c.Id == id);
 
 
             return curriculo;
