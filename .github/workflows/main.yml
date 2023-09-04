@@ -1,0 +1,29 @@
+name: Deploy
+
+
+on:
+  push:
+    branches: [ main ]
+
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:       
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd /home/paulo/Apps
+          git pull origin main
+          git status
+          cd /home/paulo/Apps/MyPortfolio/MyPortfolio.CurriculumWebAPI
+          dotnet run
+          
