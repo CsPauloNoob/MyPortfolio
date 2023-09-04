@@ -25,5 +25,6 @@ jobs:
           git pull origin main
           git status
           cd /home/paulo/Apps/MyPortfolio/MyPortfolio.CurriculumWebAPI
+          dotnet build
           dotnet run
           
