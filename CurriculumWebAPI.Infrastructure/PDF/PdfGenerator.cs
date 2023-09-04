@@ -20,7 +20,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 
         private const string DefaultCurriculumFont = StandardFonts.TIMES_ROMAN;
 
-
+        
         public async Task<string> Generate(Curriculum curriculum)
         {
             CreatePdfFolder();
@@ -73,7 +73,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
             doc.Close();
         }
 
-
+        //Teste
 
         Paragraph ParagraphFactory(string content, float fontSize,
             string font = DefaultCurriculumFont, 
