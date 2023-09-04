@@ -43,13 +43,15 @@ namespace CurriculumWebAPI.Infrastructure.PDF
         
         void CreateHeader(Curriculum curriculum, Document doc)
         {
-
+            //Adiciona O título (nome)
             doc.Add(ParagraphFactory(curriculum.Nome,
                 18, textAlignment: TextAlignment.CENTER).SetUnderline());
 
-            // Adiciona o parágrafo ao documento
-            doc.Add(ContatoFormatter(curriculum));
+            // Adiciona contato
+            doc.Add(ContatoAddresFormatter(curriculum));
 
+            doc.Add(ContatoEmailFormatter(curriculum.Contato.Email));
+            
             /*
             doc.Add(ParagraphFactory(curriculum.Nome,
                 18, textAlignment : TextAlignment.CENTER).SetUnderline());
@@ -85,22 +87,49 @@ namespace CurriculumWebAPI.Infrastructure.PDF
         }
 
 
-        Paragraph ContatoFormatter(Curriculum curriculum)
+        Paragraph ContatoAddresFormatter(Curriculum curriculum)
         {
             var paragraph = new Paragraph();
 
-            var enderecoText = new Text("Endereco: ")
-                .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD));
-            paragraph.Add(enderecoText);
-
             // Concatenação das propriedades do endereço
-            var enderecoConcatenado = curriculum.Contato.Endereco.Rua + ", " +
-                curriculum.Contato.Endereco.NumeroCasa + " - " +
+            var enderecoConcatenado = curriculum.Contato.Endereco.Rua +
+                ", " +curriculum.Contato.Endereco.NumeroCasa + " - " +
                 curriculum.Contato.Endereco.Bairro + " - " +
                 curriculum.Contato.Endereco.Cidade + "-" +
                 curriculum.Contato.Endereco.Estado;
 
+            var endereconContent = new Text(enderecoConcatenado)
+                .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                .SetFontSize(11);
+
+            var enderecoText = new Text("Endereco: ")
+                .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD))
+                .SetFontSize(11);
+
+            paragraph.SetMarginBottom(0);
+            paragraph.SetMarginTop(0);
+            paragraph.Add(enderecoText).SetMarginLeft(40);
             paragraph.Add(enderecoConcatenado);
+
+            return paragraph;
+        }
+
+
+        Paragraph ContatoEmailFormatter(string email)
+        {
+            var paragraph = new Paragraph();
+
+            var emailContent = new Text(email)
+                .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                .SetFontSize(11); ;
+
+            var emailText = new Text("Email: ")
+                .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD))
+                .SetFontSize(11);
+
+
+            paragraph.Add(emailText).SetMarginLeft(40);
+            paragraph.Add(email);
 
             return paragraph;
         }
