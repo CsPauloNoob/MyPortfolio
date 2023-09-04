@@ -73,7 +73,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
             doc.Close();
         }
 
-        //Teste
+        //Teste 3
 
         Paragraph ParagraphFactory(string content, float fontSize,
             string font = DefaultCurriculumFont, 
