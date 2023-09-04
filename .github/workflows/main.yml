@@ -3,7 +3,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
         port: 22
         script: |
           cd /home/paulo/Apps/MyPortfolio
-          git pull origin main
+          git pull origin master
           git status
           cd /home/paulo/Apps/MyPortfolio/MyPortfolio.CurriculumWebAPI
           dotnet build
