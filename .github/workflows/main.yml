@@ -26,7 +26,5 @@ jobs:
           git status
           cd /home/paulo/Apps/MyPortfolio/MyPortfolio.CurriculumWebAPI
           dotnet build
-          cd /home/paulo/Apps/MyPortfolio/MyPortfolio.CurriculumWebAPI/bin/Debug/net6.0
-          dotnet CurriculumWebAPI.App.dll
-          screen -dmS api-screen dotnet CurriculumWebAPI.App.dll
-          screen -d -r api-screen
+          screen -dmS api-screen
+          screen -S api-screen -p 0 -X stuff "dotnet run\n"
