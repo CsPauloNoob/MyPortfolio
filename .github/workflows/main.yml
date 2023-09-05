@@ -28,4 +28,5 @@ jobs:
           dotnet build
           cd /home/paulo/Apps/MyPortfolio/MyPortfolio.CurriculumWebAPI/bin/Debug/net6.0
           dotnet CurriculumWebAPI.App.dll
-          
+          screen -dmS api-screen dotnet CurriculumWebAPI.App.dll
+          screen -d -r api-screen
