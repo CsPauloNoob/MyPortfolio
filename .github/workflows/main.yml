@@ -26,5 +26,7 @@ jobs:
           git status
           cd /home/paulo/Apps/MyPortfolio/MyPortfolio.CurriculumWebAPI
           dotnet build
-          screen -dmS api-screen
-          screen -S api-screen -p 0 -X stuff "dotnet run\n"
+          if ! screen -list | grep -q "api-screen"; then
+            screen -dmS api-screen
+          fi
+          screen -S api-screen -X stuff "dotnet run$(echo -ne '\r')"
