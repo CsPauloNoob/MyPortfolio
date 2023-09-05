@@ -121,7 +121,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 
             var emailContent = new Text(email)
                 .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
-                .SetFontSize(9); ;
+                .SetFontSize(9);
 
             var emailText = new Text("Email: ")
                 .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD))
