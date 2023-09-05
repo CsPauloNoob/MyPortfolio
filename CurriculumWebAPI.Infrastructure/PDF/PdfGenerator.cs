@@ -113,6 +113,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
             return paragraph;
         }
 
+        //Teste
 
         Paragraph ContatoEmailFormatter(string email)
         {
