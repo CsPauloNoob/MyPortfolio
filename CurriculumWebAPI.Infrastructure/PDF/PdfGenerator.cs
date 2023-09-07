@@ -9,6 +9,7 @@ using iText.Layout.Element;
 using iText.IO.Font.Constants;
 using iText.Layout.Properties;
 using System.Reflection.Metadata.Ecma335;
+using CurriculumWebAPI.Domain.Models.ComplexTypes;
 
 namespace CurriculumWebAPI.Infrastructure.PDF
 {
@@ -19,6 +20,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
             Path.Combine(Environment.CurrentDirectory, "PDFs");
 
         private const string DefaultCurriculumFont = StandardFonts.TIMES_ROMAN;
+        private const float LineSpacing = 0.6f;
 
         
         public async Task<string> Generate(Curriculum curriculum)
@@ -43,44 +45,37 @@ namespace CurriculumWebAPI.Infrastructure.PDF
         
         void CreateHeader(Curriculum curriculum, Document doc)
         {
-            //Adiciona O título (nome)
-            doc.Add(ParagraphFactory(curriculum.Nome,
+            //Adiciona o nome
+            doc.Add(TitleFormatter(curriculum.Nome,
                 21, textAlignment: TextAlignment.CENTER).SetUnderline());
 
-            // Adiciona contato
             doc.Add(ContatoAddresFormatter(curriculum));
-
             doc.Add(ContatoEmailFormatter(curriculum.Contato.Email));
-            
-            /*
-            doc.Add(ParagraphFactory(curriculum.Nome,
-                18, textAlignment : TextAlignment.CENTER).SetUnderline());
+            doc.Add(ContatoPhoneFormatter(curriculum.Contato.Telefone));
+            doc.Add(PerilProgrammerFormatter(curriculum.PerfilProgramador));
 
-            doc.Add(ParagraphFactory (new Text("Endereco: ")
-                .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD))+
-                curriculum.Contato.Endereco.Rua + ", " +
-                curriculum.Contato.Endereco.NumeroCasa + " - " +
-                curriculum.Contato.Endereco.Bairro + " - " +
-                curriculum.Contato.Endereco.Cidade + "-" +
-                curriculum.Contato.Endereco.Estado, 11));
+            doc.Add(new Paragraph(" "));
+            doc.Add(new Paragraph(" "));
 
-            doc.Add(ParagraphFactory(new Text("Email: ")
-                .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD))
-                + curriculum.Contato.Email, 11));
-            */
+            //Asiciona o Titulo Sobre Mim
+            doc.Add(TitleFormatter("Sobre mim", 16,
+                textAlignment: TextAlignment.CENTER));
 
+            doc.Add(SobreMimFormatter(curriculum.SobreMim));
 
             doc.Close();
         }
 
-
-        Paragraph ParagraphFactory(string content, float fontSize,
+        #region Header Formatter
+        Paragraph TitleFormatter(string content, float fontSize,
             string font = DefaultCurriculumFont, 
             TextAlignment textAlignment = TextAlignment.JUSTIFIED)
 
         {
-            var paragraph = new Paragraph(content).SetFontSize(fontSize)
-                .SetFont(PdfFontFactory.CreateFont(font)).SetTextAlignment(textAlignment);
+            var paragraph = new Paragraph(content)
+                .SetFontSize(fontSize)
+                .SetFont(PdfFontFactory.CreateFont(font))
+                .SetTextAlignment(textAlignment);
 
             return paragraph;
         }
@@ -89,7 +84,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
         Paragraph ContatoAddresFormatter(Curriculum curriculum)
         {
             var paragraph = new Paragraph();
-            paragraph.SetMultipliedLeading(0.5f);
+            paragraph.SetMultipliedLeading(LineSpacing);
 
             // Concatenação das propriedades do endereço
             var enderecoConcatenado = curriculum.Contato.Endereco.Rua +
@@ -118,15 +113,16 @@ namespace CurriculumWebAPI.Infrastructure.PDF
         Paragraph ContatoEmailFormatter(string email)
         {
             var paragraph = new Paragraph();
-            paragraph.SetMultipliedLeading(0.5f);
+            paragraph.SetMultipliedLeading(LineSpacing);
 
             var emailContent = new Text(email)
                 .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
-                .SetFontSize(9);
+                .SetFontSize(10);
 
             var emailText = new Text("Email: ")
-                .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD))
-                .SetFontSize(9);
+                .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                .SetBold()
+                .SetFontSize(10);
 
 
             paragraph.Add(emailText).SetMarginLeft(40);
@@ -134,6 +130,78 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 
             return paragraph;
         }
+
+
+        Paragraph ContatoPhoneFormatter(PhoneNumber phone)
+        {
+            var paragraph = new Paragraph();
+            paragraph.SetMultipliedLeading(LineSpacing);
+
+            var telefoneContent = new Text(phone.ToString())
+                .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                .SetFontSize(10);
+
+            var telefoneText = new Text("Telefone: ")
+                .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                .SetBold()
+                .SetFontSize(10);
+
+            paragraph.Add(telefoneText).SetMarginLeft(40);
+            paragraph.Add(telefoneContent);
+
+            return paragraph;
+        }
+
+
+        Paragraph PerilProgrammerFormatter(string perfilProgramador)
+        {
+            var paragraph = new Paragraph();
+            paragraph.SetMultipliedLeading(LineSpacing);
+
+            var perfilContent = new Text(perfilProgramador)
+                .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                .SetFontSize(10);
+
+            var perfilText = new Text("LinkedIn: ")
+                .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                .SetFontSize(10)
+                .SetBold();
+
+            paragraph.Add(perfilText).SetMarginLeft(40);
+            paragraph.Add(perfilContent);
+
+            return paragraph;
+        }
+
+        #endregion
+
+        Paragraph SobreMimFormatter(string sobreMim)
+        {
+            var paragraph = new Paragraph();
+            paragraph.SetMultipliedLeading(LineSpacing);
+
+            var sobreMimContent = new Text(sobreMim)
+                .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                .SetFontSize(10);
+
+            paragraph.Add(sobreMimContent)
+                .SetFixedLeading(12f);
+
+            return paragraph;
+        }
+
+
+        /*Paragraph HabilidadesFormatter(string nomeHabilidade, string descHabilidade = null)
+        {
+
+            var paragraph = new Paragraph();
+            paragraph.SetMultipliedLeading(LineSpacing);
+
+            if(descHabilidade is null)
+            {
+                //var 
+            }
+        }*/
 
 
         void CreatePdfFolder()

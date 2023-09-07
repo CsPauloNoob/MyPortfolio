@@ -16,7 +16,7 @@ namespace CurriculumWebAPI.Domain.Models.ComplexTypes
 
         public override string ToString()
         {
-            return $"Telefone: +{Codigo} {DDD} {Numero}";
+            return $"+{Codigo} {DDD} {Numero}";
         }
     }
 }
