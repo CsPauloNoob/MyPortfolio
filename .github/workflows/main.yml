@@ -16,17 +16,17 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
-          cd /home/paulo/Apps/MyPortfolio
-          git pull origin master
-          git status
-          cd /home/paulo/Apps/MyPortfolio/MyPortfolio.CurriculumWebAPI
+         cd /home/paulo/Apps/MyPortfolio
+         git pull origin master
+         git status
+         cd /home/paulo/Apps/MyPortfolio/MyPortfolio.CurriculumWebAPI
 
-          if screen -list | grep -q "api-screen"; then
-
-            screen -S api-screen -X stuff "^C"
+         if screen -list | grep -q "api-screen"; then
+    
+            screen -S $(screen -list | grep "api-screen" | awk '{print $1}' | sort -r | head -n 1) -X stuff "^C"
             sleep 2 
-          fi
+         fi
 
-          dotnet build
-          screen -dmS api-screen
-          screen -S api-screen -X stuff "dotnet run$(echo -ne '\r')"
+         dotnet build
+         screen -dmS api-screen
+         screen -S api-screen -X stuff "dotnet run$(echo -ne '\r')"
