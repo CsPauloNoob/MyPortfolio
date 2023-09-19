@@ -10,19 +10,20 @@ using iText.IO.Font.Constants;
 using iText.Layout.Properties;
 using System.Reflection.Metadata.Ecma335;
 using CurriculumWebAPI.Domain.Models.ComplexTypes;
+using CurriculumWebAPI.Domain.Models.CurriculumBody;
 
 namespace CurriculumWebAPI.Infrastructure.PDF
 {
     public class PdfGenerator : IPdfGenerator
     {
 
-        private string PdfFolderPath = 
+        private string PdfFolderPath =
             Path.Combine(Environment.CurrentDirectory, "PDFs");
 
         private const string DefaultCurriculumFont = StandardFonts.TIMES_ROMAN;
         private const float LineSpacing = 0.6f;
 
-        
+
         public async Task<string> Generate(Curriculum curriculum)
         {
             CreatePdfFolder();
@@ -33,7 +34,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
             var pdf = new PdfDocument(writer);
             var document = new Document(pdf);
 
-            CreateHeader(curriculum, document);
+            WriteCurriculumPDF(curriculum, document);
 
             return filePath;
         }
@@ -42,8 +43,8 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 
 
 
-        
-        void CreateHeader(Curriculum curriculum, Document doc)
+
+        void WriteCurriculumPDF(Curriculum curriculum, Document doc)
         {
             //Adiciona o nome
             doc.Add(TitleFormatter(curriculum.Nome,
@@ -63,12 +64,21 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 
             doc.Add(SobreMimFormatter(curriculum.SobreMim));
 
+            //adiciona sessão Habilidades
+            if (curriculum.Habilidade is not null)
+            {
+                doc.Add(TitleFormatter("Habilidades", 16,
+                    textAlignment: TextAlignment.CENTER));
+
+                doc.Add(HabilidadesFormatter(curriculum.Habilidade));
+            }
+
             doc.Close();
         }
 
         #region Header Formatter
         Paragraph TitleFormatter(string content, float fontSize,
-            string font = DefaultCurriculumFont, 
+            string font = DefaultCurriculumFont,
             TextAlignment textAlignment = TextAlignment.JUSTIFIED)
 
         {
@@ -88,7 +98,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 
             // Concatenação das propriedades do endereço
             var enderecoConcatenado = curriculum.Contato.Endereco.Rua +
-                ", " +curriculum.Contato.Endereco.NumeroCasa + " - " +
+                ", " + curriculum.Contato.Endereco.NumeroCasa + " - " +
                 curriculum.Contato.Endereco.Bairro + " - " +
                 curriculum.Contato.Endereco.Cidade + "-" +
                 curriculum.Contato.Endereco.Estado;
@@ -191,6 +201,54 @@ namespace CurriculumWebAPI.Infrastructure.PDF
         }
 
 
+        Paragraph HabilidadesFormatter(List<Habilidades> habilidades)
+        {
+            var paragraph = new Paragraph();
+            paragraph.SetMultipliedLeading(LineSpacing);
+            string charScape = "";
+            int count = 0;
+
+
+            foreach (var habilidade in habilidades)
+            {
+
+                if (count > 0)
+                {
+                    habilidade.Descricao = "\n" + habilidade.Descricao;
+                    habilidade.Nome_Habilidade = "\n" + habilidade.Nome_Habilidade;
+                }
+
+                if (string.IsNullOrEmpty(habilidade.Descricao))
+                    paragraph.Add(new Text(
+                        habilidade.Nome_Habilidade)
+                        .SetFont(PdfFontFactory
+                        .CreateFont(DefaultCurriculumFont))
+                        .SetFontSize(10)
+                        .SetBold()).SetMarginLeft(40);
+
+                else
+                {
+                    paragraph.Add(new Text(
+                        habilidade.Nome_Habilidade)
+                        .SetFont(PdfFontFactory
+                        .CreateFont(DefaultCurriculumFont))
+                        .SetFontSize(10)
+                        .SetBold()).SetMarginLeft(40);
+
+                    paragraph.Add(new Text(
+                        habilidade.Descricao)
+                        .SetFont(PdfFontFactory
+                        .CreateFont(DefaultCurriculumFont))
+                        .SetFontSize(10)).SetFixedLeading(12f);
+                }
+
+                count++;
+            }
+
+            return paragraph;
+        }
+
+
         /*Paragraph HabilidadesFormatter(string nomeHabilidade, string descHabilidade = null)
         {
 
@@ -206,7 +264,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 
         void CreatePdfFolder()
         {
-            if(!Directory.Exists(PdfFolderPath))
+            if (!Directory.Exists(PdfFolderPath))
             {
                 Directory.CreateDirectory(PdfFolderPath);
             }
@@ -221,7 +279,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 
         string PathCombiner(string filePath, string extension)
         {
-            var path = Path.Combine(PdfFolderPath, filePath+extension);
+            var path = Path.Combine(PdfFolderPath, filePath + extension);
 
             return path;
         }

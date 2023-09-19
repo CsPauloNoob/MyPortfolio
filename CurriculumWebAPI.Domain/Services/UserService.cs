@@ -54,7 +54,7 @@ namespace CurriculumWebAPI.Domain.Services
 
         public async Task<Token> CreateUser(User User)
         {
-
+            User.Id = Guid.NewGuid().ToString();
             var exists = await _reposity.GetById(User.Id);
 
             if (exists is null)

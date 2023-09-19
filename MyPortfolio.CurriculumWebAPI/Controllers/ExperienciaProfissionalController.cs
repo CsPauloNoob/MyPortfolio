@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CurriculumWebAPI.App.Controllers
 {
 
-    [Route("V1/api/exp_profissional")]
+    [Route("V1/api/exp-profissional")]
     [ApiController]
     public class ExperienciaProfissionalController : ControllerBase
     {
@@ -166,7 +166,7 @@ namespace CurriculumWebAPI.App.Controllers
             }
         }
 
-
+        
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteById(int id)

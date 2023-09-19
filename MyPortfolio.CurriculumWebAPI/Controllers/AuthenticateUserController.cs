@@ -14,7 +14,7 @@ namespace CurriculumWebAPI.App.Controllers
 {
 
     [ApiController]
-    [Route("V1/api/auth")]
+    [Route("V1/api/user")]
     public class AuthenticateUserController : ControllerBase
     {
         private readonly Mapper _mapper;
@@ -29,12 +29,10 @@ namespace CurriculumWebAPI.App.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("create")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> CreateUser([FromBody] UserInputModel userInfo)
+        public async Task<ActionResult<dynamic>> CreateUser( UserInputModel userInfo)
         {
-            userInfo.Id = Guid.NewGuid();
-
             var token = await _userService.CreateUser(_mapper.Map<User>(userInfo));
 
             return CreatedAtAction(nameof(CreateUser),new
