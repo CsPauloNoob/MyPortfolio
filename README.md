@@ -15,3 +15,6 @@ e
 > dotnet run
 
 <img src="/images/screenshot%20API.png">
+
+
+> pegue uma visão geral dos endpoints com GET https://dotcurriculum.azurewebsites.net/V1/api/endpoints/htu

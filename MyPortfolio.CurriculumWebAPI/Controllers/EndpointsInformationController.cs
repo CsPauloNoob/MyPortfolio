@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace CurriculumWebAPI.App.Controllers
 {
     [ApiController]
-    [Route("V1/api/htu")]
+    [Route("V1/api/endpoints")]
     public class EndpointsInformationController : ControllerBase
     {
         private readonly IActionDescriptorCollectionProvider _actionDescriptorCollectionProvider;
@@ -18,7 +18,7 @@ namespace CurriculumWebAPI.App.Controllers
             _actionDescriptorCollectionProvider = actionDescriptorCollectionProvider;
         }
 
-        [HttpGet]
+        [HttpGet("htu")]
         public async Task<IActionResult> Get()
         {
             var apiInfos = new List<ApiInfo>();
