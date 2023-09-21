@@ -33,6 +33,7 @@ namespace CurriculumWebAPI.App.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> CreateUser( UserInputModel userInfo)
         {
+            try{
             var token = await _userService.CreateUser(_mapper.Map<User>(userInfo));
 
             return CreatedAtAction(nameof(CreateUser),new
@@ -40,6 +41,12 @@ namespace CurriculumWebAPI.App.Controllers
                 authToken = token.MyToken,
                 user = userInfo
             });
+            }
+
+            catch(exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
