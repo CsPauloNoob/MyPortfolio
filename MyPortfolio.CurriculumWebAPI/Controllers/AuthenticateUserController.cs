@@ -43,10 +43,11 @@ namespace CurriculumWebAPI.App.Controllers
             });
             }
 
-            catch(exception ex)
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+
         }
 
 
