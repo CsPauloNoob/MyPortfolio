@@ -31,19 +31,20 @@ namespace CurriculumWebAPI.App.Controllers
 
         [HttpPost("create")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> CreateUser( UserInputModel userInfo)
+        public async Task<ActionResult<dynamic>> CreateUser(UserInputModel userInfo)
         {
-            try{
-            var token = await _userService.CreateUser(_mapper.Map<User>(userInfo));
-
-            return CreatedAtAction(nameof(CreateUser),new
+            try
             {
-                authToken = token.MyToken,
-                user = userInfo
-            });
+                var token = await _userService.CreateUser(_mapper.Map<User>(userInfo));
+
+                return CreatedAtAction(nameof(CreateUser), new
+                {
+                    authToken = token.MyToken,
+                    user = userInfo.UserName
+                });
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

@@ -45,6 +45,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<MyContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//Verifica se o banco foi criado
+
 BootStrap.Configure(builder);
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));

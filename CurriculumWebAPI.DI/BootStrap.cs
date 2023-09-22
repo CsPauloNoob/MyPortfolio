@@ -40,8 +40,9 @@ namespace CurriculumWebAPI.DI
                     ClockSkew = TimeSpan.Zero
                 });
 
-            #region DI region
 
+            #region DI region
+            
             services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
             services.AddScoped(typeof(IRepositoryForCollections<Formacao>), typeof(FormacaoRepository));
             services.AddScoped(typeof(IRepositoryForCollections<Habilidades>), typeof(HabilidadeRepository));
@@ -63,8 +64,12 @@ namespace CurriculumWebAPI.DI
             services.AddTransient(typeof(PdfService));
 
             services.AddTransient(typeof(Mapper));
-
             #endregion
+
+            var _services = services.BuildServiceProvider();
+
+            var dbcontext = _services.GetService<MyContext>();
+            dbcontext.Database.EnsureCreated();
         }
     }
 }
