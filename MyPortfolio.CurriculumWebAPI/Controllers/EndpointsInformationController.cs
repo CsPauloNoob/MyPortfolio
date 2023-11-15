@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace CurriculumWebAPI.App.Controllers
 {
@@ -18,6 +19,8 @@ namespace CurriculumWebAPI.App.Controllers
             _actionDescriptorCollectionProvider = actionDescriptorCollectionProvider;
         }
 
+
+
         [HttpGet("htu")]
         public async Task<IActionResult> Get()
         {
@@ -30,7 +33,7 @@ namespace CurriculumWebAPI.App.Controllers
                 {
                     var apiInfo = new ApiInfo
                     {
-                        HttpMethod = controllerActionDescriptor.MethodInfo.Attributes.ToString(),
+                        HttpMethod = GetHttpMethod(controllerActionDescriptor),
                         Route = controllerActionDescriptor.AttributeRouteInfo.Template,
                         Parameters = new List<ParameterInfo>(),
                     };
@@ -58,5 +61,15 @@ namespace CurriculumWebAPI.App.Controllers
 
             return Ok(apiInfos);
         }
+
+        private string GetHttpMethod(ControllerActionDescriptor controllerActionDescriptor)
+        {
+            var httpMethodAttribute = controllerActionDescriptor.MethodInfo
+                .GetCustomAttributes(typeof(HttpMethodAttribute), inherit: true)
+                .FirstOrDefault() as HttpMethodAttribute;
+
+            return httpMethodAttribute?.HttpMethods.FirstOrDefault();
+        }
+
     }
 }

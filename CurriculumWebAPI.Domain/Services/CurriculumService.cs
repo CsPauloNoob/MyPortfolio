@@ -32,8 +32,8 @@ namespace CurriculumWebAPI.Domain.Services
             else return result;
 
         }
-
-
+        
+        // TODO: resposta generica, string magica e implementar RESULT VALUES;
         public async Task<Curriculum> HeaderSave(Curriculum curriculum, string emailUser)
         {
             var isNew = await IsNewCurriculum(emailUser);
@@ -79,16 +79,12 @@ namespace CurriculumWebAPI.Domain.Services
 
         private async Task<bool> IsNewCurriculum(string email)
         {
-            try
-            {
-                var result = await _curriculumRepository.GetByEmail(email);
-                return false;
-            }
+            var headerCurriculum = await _curriculumRepository.GetByEmail(email);
 
-            catch (Exception)
-            {
-                return true;
-            }
+            if (headerCurriculum is not null)
+                return false;
+
+            else return false;
         }
 
 

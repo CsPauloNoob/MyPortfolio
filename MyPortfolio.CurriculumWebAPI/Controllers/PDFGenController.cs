@@ -56,5 +56,39 @@ namespace CurriculumWebAPI.App.Controllers
             }
 
         }
+
+        [HttpGet("owner")]
+        public async Task<HttpResponseMessage> GetOwnerPDF()
+        {
+            try
+            {
+                byte[] pdfBytes = await _pdfService.GetPauloCurriculumPdf();
+
+                HttpResponseMessage response = new HttpResponseMessage();
+                response.Content = new ByteArrayContent(pdfBytes);
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = "Paulo.pdf"
+                };
+
+                return response;
+            }
+
+            catch (NotFoundInDatabaseException ex)
+            {
+                return new HttpResponseMessage()
+                { StatusCode = System.Net.HttpStatusCode.NotFound, ReasonPhrase = ex.Message };
+
+            }
+
+            catch (Exception ex)
+            {
+                return new HttpResponseMessage()
+                { StatusCode = System.Net.HttpStatusCode.InternalServerError, ReasonPhrase = ex.Message };
+            }
+        }
+
     }
 }

@@ -9,7 +9,7 @@ namespace CurriculumWebAPI.App.InputModels
         [MaxLength(35)]
         public string Nome_Habilidade { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(180)]
         public string? Descricao { get; set; }
     }
 }

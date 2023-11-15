@@ -7,7 +7,7 @@ namespace CurriculumWebAPI.App.InputModels
         [MaxLength(30)]
         public string Instituicao { get; set; }
 
-        [MaxLength(35)]
+        [MaxLength(50)]
         public string Curso { get; set; }
 
         [MaxLength(4)]

@@ -14,12 +14,15 @@ namespace CurriculumWebAPI.Domain.Services
     {
         private readonly IRepository<Curriculum> _repository;
         private readonly IPdfGenerator _pdfGenerator;
+        private const string _personalEmail = "ps616131@gmail.com";
 
         public PdfService(IRepository<Curriculum>repository,IPdfGenerator pdfGenerator)
         {
             _repository = repository;
             _pdfGenerator = pdfGenerator;
         }
+
+
 
         public async Task<byte[]> CreatePdf(string email)
         {
@@ -35,13 +38,14 @@ namespace CurriculumWebAPI.Domain.Services
         }
 
 
-        public async Task<string> GetPauloCurriculumPdf()
+
+        public async Task<byte[]> GetPauloCurriculumPdf()
         {
-            var curriculum = await _repository.GetById("1");
+            var curriculum = await _repository.GetByEmail(_personalEmail);
 
             var pdfFile = await _pdfGenerator.Generate(curriculum);
 
-            return pdfFile;
+            return File.ReadAllBytes(pdfFile);
         }
     }
 }

@@ -117,7 +117,7 @@ namespace CurriculumWebAPI.App.Controllers
 
         #region Contato Controllers
 
-        // -----> Resolver problemas
+        // -----> Resolver problemas e mover para controller própria
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("contato")]
         public async Task<IActionResult> NewContato(ContatoInputModel contatoInputModel)
@@ -223,11 +223,5 @@ namespace CurriculumWebAPI.App.Controllers
 
 
 
-        [AllowAnonymous]
-        [HttpGet("owner")]
-        public async Task<string> GetOwner()
-        {
-            return await _pdfServices.GetPauloCurriculumPdf();
-        }
     }
 }
