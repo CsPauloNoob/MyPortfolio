@@ -77,14 +77,24 @@ namespace CurriculumWebAPI.Domain.Services
         }
 
 
+        //Problema consultar o curriculum em novas contas
         private async Task<bool> IsNewCurriculum(string email)
         {
-            var headerCurriculum = await _curriculumRepository.GetByEmail(email);
+            
+            try
+            {
+                var headerCurriculum = await _curriculumRepository.GetByEmail(email);
 
-            if (headerCurriculum is not null)
+                if (headerCurriculum is not null)
+                    return false;
+
+                else return true;
+            }
+
+            catch(Exception)
+            {
                 return false;
-
-            else return false;
+            }
         }
 
 

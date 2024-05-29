@@ -22,6 +22,7 @@ namespace CurriculumWebAPI.App.InputModels
         [MaxLength(2)]
         public string Estado { get; set; }
 
+        //Retirar daqui e auto preencher na hora de salvar no banco. Código se refere ao código brasileiro de telefone +55.
         [MaxLength(3)]
         public string Codigo { get; set; }
 

@@ -94,7 +94,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
                 _context.Users.Update(newUser);
                 var result = await _context.SaveChangesAsync();
 
-                return result>1?true:false;
+                return result==1?true:false;
             }
 
             else throw new NotFoundInDatabaseException("");

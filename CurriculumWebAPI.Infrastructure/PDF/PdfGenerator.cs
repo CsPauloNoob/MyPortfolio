@@ -11,6 +11,9 @@ using iText.Layout.Properties;
 using System.Reflection.Metadata.Ecma335;
 using CurriculumWebAPI.Domain.Models.ComplexTypes;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
+using iText.Layout.Borders;
+using iText.Kernel.Colors;
+using iText.Layout.Font;
 
 namespace CurriculumWebAPI.Infrastructure.PDF
 {
@@ -48,7 +51,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
         {
             //Adiciona o nome
             doc.Add(TitleFormatter(curriculum.Nome,
-                21, textAlignment: TextAlignment.CENTER).SetUnderline());
+                24,textAlignment: TextAlignment.CENTER).SetUnderline());
 
             doc.Add(ContatoAddresFormatter(curriculum));
             doc.Add(ContatoEmailFormatter(curriculum.Contato.Email));
@@ -58,7 +61,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
             doc.Add(new Paragraph(" "));
             doc.Add(new Paragraph(" "));
 
-            //Asiciona o Titulo Sobre Mim
+            //Adiciona todo o cabeçalho
             doc.Add(TitleFormatter("Sobre mim", 16,
                 textAlignment: TextAlignment.CENTER));
 
@@ -201,65 +204,59 @@ namespace CurriculumWebAPI.Infrastructure.PDF
         }
 
 
-        Paragraph HabilidadesFormatter(List<Habilidades> habilidades)
+        Table HabilidadesFormatter(List<Habilidades> habilidades)
         {
-            var paragraph = new Paragraph();
-            paragraph.SetMultipliedLeading(LineSpacing);
-            string charScape = "";
-            int count = 0;
+            Table table = new Table(UnitValue.CreatePercentArray(new float[] {10, 40}));
+            table.SetMarginLeft(40);
 
-
-            foreach (var habilidade in habilidades)
+            foreach (var item in habilidades)
             {
+                Cell cellNome = InstanceCellhabilidadeNome(item.Nome_Habilidade);
+                Cell cellDesc = InstanceCellHabilidadeDesc(item.Descricao, item.Nome_Habilidade.Length);
 
-                if (count > 0)
-                {
-                    habilidade.Descricao = "\n" + habilidade.Descricao;
-                    habilidade.Nome_Habilidade = "\n" + habilidade.Nome_Habilidade;
-                }
-
-                if (string.IsNullOrEmpty(habilidade.Descricao))
-                    paragraph.Add(new Text(
-                        habilidade.Nome_Habilidade)
-                        .SetFont(PdfFontFactory
-                        .CreateFont(DefaultCurriculumFont))
-                        .SetFontSize(10)
-                        .SetBold()).SetMarginLeft(40);
-
-                else
-                {
-                    paragraph.Add(new Text(
-                        habilidade.Nome_Habilidade)
-                        .SetFont(PdfFontFactory
-                        .CreateFont(DefaultCurriculumFont))
-                        .SetFontSize(10)
-                        .SetBold()).SetMarginLeft(40);
-
-                    paragraph.Add(new Text(
-                        habilidade.Descricao)
-                        .SetFont(PdfFontFactory
-                        .CreateFont(DefaultCurriculumFont))
-                        .SetFontSize(10)).SetFixedLeading(12f);
-                }
-
-                count++;
+                table.AddCell(cellNome);
+                table.AddCell(cellDesc);
             }
 
-            return paragraph;
+            return table;
         }
 
 
-        /*Paragraph HabilidadesFormatter(string nomeHabilidade, string descHabilidade = null)
+        Cell InstanceCellhabilidadeNome(string content)
         {
+            var cell = new Cell();
 
-            var paragraph = new Paragraph();
-            paragraph.SetMultipliedLeading(LineSpacing);
+            cell.Add(new Paragraph(content)
+                    .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                    .SetFontSize(10)
+                    .SetItalic()
+                    .SetTextAlignment(TextAlignment.RIGHT))
+                    .SetBorder(new DashedBorder(ColorConstants.WHITE, 1));
 
-            if(descHabilidade is null)
-            {
-                //var 
-            }
-        }*/
+            return cell;
+        }
+
+        Cell InstanceCellHabilidadeDesc(string content, int Nomelength)
+        {
+            var cell = new Cell();
+
+            if(Nomelength > 12)
+            cell.Add(new Paragraph(content)
+                    .SetMarginLeft(8)
+                    .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                    .SetMarginTop(5)
+                    .SetFontSize(10))
+                    .SetBorder(new DashedBorder(ColorConstants.WHITE, 1));
+
+            else
+                cell.Add(new Paragraph(content)
+                    .SetMarginLeft(8)
+                    .SetFont(PdfFontFactory.CreateFont(DefaultCurriculumFont))
+                    .SetFontSize(10))
+                    .SetBorder(new DashedBorder(ColorConstants.WHITE, 1));
+
+            return cell;
+        }
 
 
         void CreatePdfFolder()

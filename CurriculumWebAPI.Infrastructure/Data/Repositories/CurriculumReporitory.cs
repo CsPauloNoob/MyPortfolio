@@ -46,10 +46,12 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
         public async Task<Curriculum> GetByEmail(string email)
         {
-            var user = _context.Users.Include(c => c.Curriculum).FirstOrDefault(u => u.Email == email);
+            email = email.Normalize();
+            var user = _context.Users.Where(u => u.Email == email).Include(c => c.Curriculum).FirstOrDefault();
+            //var user = _context.Users.Include(c => c.Curriculum).FirstOrDefault(u => u.Email == email);
 
             if (user.Curriculum is null)
-                throw new NotFoundInDatabaseException("Curriculum não existe");
+                return null;
 
             return user.Curriculum;
         }

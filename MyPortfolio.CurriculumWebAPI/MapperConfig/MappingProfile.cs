@@ -60,6 +60,24 @@ namespace CurriculumWebAPI.App.MapperConfig
             .ForMember(dest => dest.Cidade, opt => opt.MapFrom(src => src.Endereco.Cidade))
             .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Endereco.Estado));
 
+
+            CreateMap<ContatoViewModel, Contato>()
+            .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => new Address
+            {
+                Rua = src.Rua,
+                Bairro = src.Bairro,
+                NumeroCasa = src.NumeroCasa,
+                Cidade = src.Cidade,
+                Estado = src.Estado
+            }))
+            .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => new PhoneNumber
+            {
+                DDD = src.DDD,
+                Numero = src.NumeroCasa,
+                Codigo = src.Codigo
+            }))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
+
             #endregion
 
 
