@@ -146,8 +146,7 @@ namespace CurriculumWebAPI.App.Controllers
                 //Salva no banco e retorna bool para validação
                 if (await _curriculoService.AddContato(contato))
 
-                    return CreatedAtAction(nameof(
-                        _curriculoService.AddContato), contatoInputModel);
+                    return CreatedAtAction(nameof(GetContato), new { curriculumId = contato.CurriculumId }, contato);
 
                 return BadRequest();
             }
@@ -176,7 +175,7 @@ namespace CurriculumWebAPI.App.Controllers
 
             catch (NotFoundInDatabaseException ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
 
             catch(Exception ex)

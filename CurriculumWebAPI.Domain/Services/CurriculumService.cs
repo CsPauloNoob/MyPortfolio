@@ -125,6 +125,9 @@ namespace CurriculumWebAPI.Domain.Services
         {
             var curriculum = await _curriculumRepository.GetByEmail(email);
 
+            if (curriculum is null)
+                throw new NotFoundInDatabaseException("Curriculum não encontrado no banco");
+            
             var contato = await _contatoRepository.GetById(curriculum.Id);
 
             if (shotException && contato is null)

@@ -2,6 +2,7 @@
 using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using CurriculumWebAPI.Infrastructure.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
         public async Task<int> AddNew(Contato entity)
         {
 
-            await _context.Contato.AddAsync(entity);
-
+           var result = await _context.Contato.AddAsync(entity);
             return await _context.SaveChangesAsync();
         }
 
