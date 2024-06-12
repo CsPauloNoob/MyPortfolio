@@ -67,5 +67,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors(c => c.AllowAnyOrigin());
 
 app.Run();
