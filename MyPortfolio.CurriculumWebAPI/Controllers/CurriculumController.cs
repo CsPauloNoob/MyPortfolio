@@ -41,7 +41,7 @@ namespace CurriculumWebAPI.App.Controllers
             try
             {
                 var email = await this.GetEmailFromUser();
-                var curriculum = await _curriculoService.GetHeaderByEmail(email);
+                var curriculum = await _curriculoService.GetCurriculum(email, false);
 
                 return Ok(_mapper.Map<CurriculumHeaderVM>(curriculum));
             }
@@ -64,7 +64,7 @@ namespace CurriculumWebAPI.App.Controllers
             {
                 var mapped = _mapper.Map<Curriculum>(curriculum);
 
-                var curriculoResult = await _curriculoService.HeaderSave(mapped, email);
+                var curriculoResult = await _curriculoService.CurriculumHeaderSave(mapped, email);
                 //Recupera user para vincular curriculo novo
                 var user = await _userService.GetUserByEmail(email);
 
@@ -94,8 +94,8 @@ namespace CurriculumWebAPI.App.Controllers
             {
                 var email = await this.GetEmailFromUser();
 
-                var result = await _curriculoService.HeaderUpdate(
-                    _mapper.Map<Curriculum>(curriculum), email);
+                var result = await _curriculoService.CurriculumHeaderUpdate(
+                    _mapper.Map<Curriculum>(curriculum), email, false);
 
                 if (result)
                     return CreatedAtAction(nameof(HeaderPut), curriculum);
@@ -111,6 +111,26 @@ namespace CurriculumWebAPI.App.Controllers
             catch(Exception ex)
             {
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("full")]
+        public async Task<IActionResult> GetFullCurriculum()
+        {
+            try
+            {
+                var email = await this.GetEmailFromUser();
+                var result = await _curriculoService.GetCurriculum(email, true);
+
+                result.Id = string.Empty;
+
+                return Ok(result);
+            }
+
+            catch(Exception ex)
+            {
+                return BadRequest();
             }
         }
 

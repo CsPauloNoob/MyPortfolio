@@ -43,7 +43,7 @@ namespace CurriculumWebAPI.Domain.Services
 
         public async Task<User> GetUserByEmail(string email)
         {
-            var user = await _reposity.GetByEmail(email);
+            var user = await _reposity.GetByEmail(email, false);
 
             if (user is null)
                 throw new NotFoundInDatabaseException("Falha no banco, ou usuário não existe");
@@ -55,7 +55,7 @@ namespace CurriculumWebAPI.Domain.Services
         public async Task<Token> CreateUser(User User)
         {
             User.Id = Guid.NewGuid().ToString();
-            var exists = await _reposity.GetById(User.Id);
+            var exists = await _reposity.GetById(User.Id, false);
 
             if (exists is null)
             {

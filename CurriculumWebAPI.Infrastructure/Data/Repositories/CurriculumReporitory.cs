@@ -2,7 +2,9 @@
 using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Infrastructure.Data.Context;
+using CurriculumWebAPI.Infrastructure.IdentityConfigs;
 using Microsoft.EntityFrameworkCore;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 {
@@ -31,7 +33,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 
 
 
-        public async Task<Curriculum> GetById(string id)
+        public async Task<Curriculum> GetById(string id, bool IsComplet)
         {
             var curriculo = _context.Curriculum.Include
                 (c => c.Experiencia_Profissional).Include
@@ -44,16 +46,30 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             return curriculo;
         }
 
-        public async Task<Curriculum> GetByEmail(string email)
+        public async Task<Curriculum> GetByEmail(string email, bool IsComplet)
         {
             email = email.Normalize();
-            var user = _context.Users.Where(u => u.Email == email).Include(c => c.Curriculum).FirstOrDefault();
-            //var user = _context.Users.Include(c => c.Curriculum).FirstOrDefault(u => u.Email == email);
+            ApplicationUser user =  null!;
+            Curriculum curriculum = null!;
 
-            if (user.Curriculum is null)
-                return null;
 
-            return user.Curriculum;
+            if (!IsComplet)
+                user = _context.Users.Where(u => u.Email == email).Include(c => c.Curriculum).FirstOrDefault()!;
+
+            else
+                curriculum = _context.Curriculum.Include
+                    (c => c.Experiencia_Profissional).Include
+                    (c => c.Cursos).Include(c => c.Habilidade).Include
+                    (c => c.Contato).Include
+                    (c => c.Formacao).FirstOrDefault() !;
+
+            if (user?.Curriculum is null)
+            {
+                return curriculum;
+            }
+
+            else
+                return user.Curriculum;
         }
 
         public async Task<int> AddNew(Curriculum curriculum)

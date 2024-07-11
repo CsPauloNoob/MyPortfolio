@@ -46,7 +46,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<User> GetByEmail(string email)
+        public Task<User> GetByEmail(string email, bool IsComplet = false)
         {
             var user = _context.Users.Include(c => c.Curriculum)
                 .FirstOrDefault(x => x.Email == email);
@@ -57,7 +57,7 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
                 UserName = user.UserName });
         }
 
-        public async Task<User> GetById(string id)
+        public async Task<User> GetById(string id, bool IsComplet = false)
         {
             try
             {

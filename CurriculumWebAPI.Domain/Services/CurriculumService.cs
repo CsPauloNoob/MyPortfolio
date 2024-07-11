@@ -14,17 +14,24 @@ namespace CurriculumWebAPI.Domain.Services
     {
         private readonly IRepository<Curriculum> _curriculumRepository;
         private readonly IRepository<Contato> _contatoRepository;
+        private readonly IRepository<Experiencia_Profissional> _expProfissional;
+        private readonly IRepository<Formacao> _formacao;
+        private readonly IRepository<Cursos_Extras> _cursosExtras;
 
-        public CurriculumService(IRepository<Curriculum> curriculumRepository, IRepository<Contato> contatoRepository)
+        public CurriculumService(IRepository<Curriculum> curriculumRepository)
         {
             _curriculumRepository = curriculumRepository;
-            _contatoRepository = contatoRepository;
         }
 
-        public async Task<Curriculum> GetHeaderByEmail(string email)
+
+
+
+
+
+        public async Task<Curriculum> GetCurriculum(string email, bool isFullCurriculum)
         {
 
-            var result = await _curriculumRepository.GetByEmail(email);
+            var result = await _curriculumRepository.GetByEmail(email, isFullCurriculum);
 
             if (result is null)
                 throw new NotFoundInDatabaseException("Erro no banco ou objeto não encontrado");
@@ -33,8 +40,8 @@ namespace CurriculumWebAPI.Domain.Services
 
         }
         
-        // TODO: resposta generica, string magica e implementar RESULT VALUES;
-        public async Task<Curriculum> HeaderSave(Curriculum curriculum, string emailUser)
+        // TODO: Resolver resposta generica, string magica e implementar RESULT VALUES;
+        public async Task<Curriculum> CurriculumHeaderSave(Curriculum curriculum, string emailUser)
         {
             var isNew = await IsNewCurriculum(emailUser);
 
@@ -50,9 +57,9 @@ namespace CurriculumWebAPI.Domain.Services
         }
 
 
-        public async Task<bool> HeaderUpdate(Curriculum curriculum, string email)
+        public async Task<bool> CurriculumHeaderUpdate(Curriculum curriculum, string email, bool isComplet)
         {
-            var existingCurriculum = await _curriculumRepository.GetByEmail(email);
+            var existingCurriculum = await _curriculumRepository.GetByEmail(email, isComplet);
 
             if (existingCurriculum is null)
                 throw new NotFoundInDatabaseException("Objeto não encontrado no banco de dados!");
@@ -83,7 +90,7 @@ namespace CurriculumWebAPI.Domain.Services
             
             try
             {
-                var headerCurriculum = await _curriculumRepository.GetByEmail(email);
+                var headerCurriculum = await _curriculumRepository.GetByEmail(email, false);
 
                 if (headerCurriculum is not null)
                     return false;
@@ -123,12 +130,12 @@ namespace CurriculumWebAPI.Domain.Services
 
         public async Task<Contato> GetContatoFromCurriculumByEmail(string email, bool shotException = true)
         {
-            var curriculum = await _curriculumRepository.GetByEmail(email);
+            var curriculum = await _curriculumRepository.GetByEmail(email, false);
 
             if (curriculum is null)
                 throw new NotFoundInDatabaseException("Curriculum não encontrado no banco");
             
-            var contato = await _contatoRepository.GetById(curriculum.Id);
+            var contato = await _contatoRepository.GetById(curriculum.Id, false);
 
             if (shotException && contato is null)
                 throw new NotFoundInDatabaseException("sessão de contato não preenchida.");

@@ -26,8 +26,8 @@ namespace CurriculumWebAPI.Domain.Services
 
         public async Task<byte[]> CreatePdf(string email)
         {
-            var curriculum = await _repository.GetByEmail(email);
-            var fullCurriculum = await _repository.GetById(curriculum.Id);
+            var curriculum = await _repository.GetByEmail(email, false);
+            var fullCurriculum = await _repository.GetById(curriculum.Id, false);
 
             if (fullCurriculum is null)
                 throw new NotFoundInDatabaseException("Objeto não encontrado na base de dados!");
@@ -41,8 +41,8 @@ namespace CurriculumWebAPI.Domain.Services
 
         public async Task<byte[]> GetPauloCurriculumPdf()
         {
-            var curriculum = await _repository.GetByEmail(_personalEmail);
-            var fullCurriculum = await _repository.GetById(curriculum.Id);
+            var curriculum = await _repository.GetByEmail(_personalEmail, false);
+            var fullCurriculum = await _repository.GetById(curriculum.Id, false);
 
             var pdfFile = await _pdfGenerator.Generate(fullCurriculum);
 

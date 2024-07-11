@@ -33,13 +33,13 @@ namespace CurriculumWebAPI.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Contato> GetByEmail(string email)
+        public Task<Contato> GetByEmail(string email, bool IsComplet = false)
         {
             //var contato = _context
             throw new Exception();
         }
 
-        public Task<Contato> GetById(string curriculumId)
+        public Task<Contato> GetById(string curriculumId, bool IsComplet = false)
         {
             var contato = _context.Contato.
                 FirstOrDefault(c => c.CurriculumId == curriculumId);
