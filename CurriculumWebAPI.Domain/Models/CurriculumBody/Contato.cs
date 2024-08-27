@@ -9,6 +9,10 @@ namespace CurriculumWebAPI.Domain.Models.CurriculumBody
     {
         public int Id { get; set; }
         public string Email { get; set; }
+
+        [NotMapped]
+        public string? LinkedIn { get; set; }
+
         public PhoneNumber Telefone { get; set; }
         public Address Endereco { get; set; }
 

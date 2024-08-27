@@ -14,6 +14,6 @@ namespace CurriculumWebAPI.App.InputModels
         [MaxLength(400)]
         public string SobreMim { get; set; }
 
-        public DateTime DataCriacao { get; set; }
+        //public DateTime DataCriacao { get; set; }
     }
 }

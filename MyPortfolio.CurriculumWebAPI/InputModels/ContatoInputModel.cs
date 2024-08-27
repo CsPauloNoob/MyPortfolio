@@ -7,6 +7,9 @@ namespace CurriculumWebAPI.App.InputModels
         [Required]
         public string Email { get; set; }
 
+        
+        public string? LinkedIn { get; set; }
+
         [MaxLength(50)]
         public string Rua { get; set; }
 

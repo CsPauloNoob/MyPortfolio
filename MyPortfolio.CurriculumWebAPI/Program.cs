@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using static System.Net.Mime.MediaTypeNames;
 using System.Diagnostics.Metrics;
 using System.Reflection.Metadata;
+using CurriculumWebAPI.App;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,21 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<MyContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//Verifica se o banco foi criado
+
+//Configuração do CORS
+builder.Services.AddCors(
+    opt => opt.AddPolicy(
+        Configuration.CorsPolicyName,
+        policy =>
+        policy.WithOrigins
+        (new string[]
+        { Configuration.BackendUrl,
+            Configuration.FrontendUrl
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials())
+    );
 
 BootStrap.Configure(builder);
 
@@ -68,12 +83,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(Configuration.CorsPolicyName);
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseCors(c => c.AllowAnyOrigin());
 
 app.Run();

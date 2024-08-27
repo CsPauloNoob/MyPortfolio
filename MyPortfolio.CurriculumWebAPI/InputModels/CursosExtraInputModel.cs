@@ -4,6 +4,7 @@ namespace CurriculumWebAPI.App.InputModels
 {
     public class CursosExtraInputModel
     {
+
         [Required]
         [MaxLength(35)]
         public string Nome_Curso { get; set; }

@@ -1,12 +1,6 @@
 ﻿using CurriculumWebAPI.Domain.Exceptions;
 using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CurriculumWebAPI.Domain.Services
 {
@@ -48,5 +42,13 @@ namespace CurriculumWebAPI.Domain.Services
 
             return File.ReadAllBytes(pdfFile);
         }
+
+        public Task TestPdfServices(Curriculum curriculum)
+        {
+            _pdfGenerator.Generate(curriculum);
+
+            return Task.CompletedTask;
+        }
+
     }
 }

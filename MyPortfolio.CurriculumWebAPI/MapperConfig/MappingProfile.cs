@@ -37,8 +37,7 @@ namespace CurriculumWebAPI.App.MapperConfig
             {
                 Rua = src.Rua,
                 Bairro = src.Bairro,
-                NumeroCasa =
-            src.NumeroCasa,
+                NumeroCasa = src.NumeroCasa,
                 Cidade = src.Cidade,
                 Estado = src.Estado
             }));
@@ -46,7 +45,6 @@ namespace CurriculumWebAPI.App.MapperConfig
 
             CreateMap<Curriculum, CurriculumHeaderVM>();
             #endregion
-
             #region Contato Mapper
             //CreateMap<Contato, ContatoViewModel>();
 
@@ -79,6 +77,22 @@ namespace CurriculumWebAPI.App.MapperConfig
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
 
             #endregion
+
+            #region CompleteCurriculumIM para Curriculum
+
+            CreateMap<CompleteCurriculumIM, Curriculum>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.Header.Nome))
+            .ForMember(dest => dest.PerfilProgramador, opt => opt.MapFrom(src => src.Header.PerfilProgramador))
+            .ForMember(dest => dest.SobreMim, opt => opt.MapFrom(src => src.Header.SobreMim))
+            .ForMember(dest => dest.Formacao, opt => opt.MapFrom(src => src.Formacao))
+            .ForMember(dest => dest.Experiencia_Profissional, opt => opt.MapFrom(src => src.ExpProfissional))
+            .ForMember(dest => dest.Habilidade, opt => opt.MapFrom( src => src.Habilidades))  // Mapeie conforme necessário
+            .ForMember(dest => dest.Cursos, opt => opt.MapFrom(src => src.Cursos_Extra))
+            .ForMember(dest => dest.Contato, opt => opt.MapFrom(src => src.Contato));
+
+            #endregion
+
 
 
             #region Formacao Mappper

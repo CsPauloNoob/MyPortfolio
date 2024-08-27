@@ -1,10 +1,8 @@
-﻿using CurriculumWebAPI.Domain.Exceptions;
-using CurriculumWebAPI.Domain.Interfaces;
+﻿using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models;
 using CurriculumWebAPI.Infrastructure.Data.Context;
 using CurriculumWebAPI.Infrastructure.IdentityConfigs;
 using Microsoft.EntityFrameworkCore;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace CurriculumWebAPI.Infrastructure.Data.Repositories
 {
