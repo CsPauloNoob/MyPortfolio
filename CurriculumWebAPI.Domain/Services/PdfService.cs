@@ -1,6 +1,7 @@
 ﻿using CurriculumWebAPI.Domain.Exceptions;
 using CurriculumWebAPI.Domain.Interfaces;
 using CurriculumWebAPI.Domain.Models;
+using System.Security.Cryptography;
 
 namespace CurriculumWebAPI.Domain.Services
 {
@@ -35,19 +36,17 @@ namespace CurriculumWebAPI.Domain.Services
 
         public async Task<byte[]> GetPauloCurriculumPdf()
         {
-            var curriculum = await _repository.GetByEmail(_personalEmail, false);
-            var fullCurriculum = await _repository.GetById(curriculum.Id, false);
+            var pdfPath = Path.Combine(Environment.CurrentDirectory, "PDFs/Paulo.pdf");
+            var pdfBytes = await File.ReadAllBytesAsync(pdfPath);
 
-            var pdfFile = await _pdfGenerator.Generate(fullCurriculum);
-
-            return File.ReadAllBytes(pdfFile);
+            return pdfBytes;
         }
 
-        public Task TestPdfServices(Curriculum curriculum)
+        public async Task<byte[]> TestPdfServices(Curriculum curriculum)
         {
-            _pdfGenerator.Generate(curriculum);
+            var pdf = await _pdfGenerator.Generate(curriculum);
 
-            return Task.CompletedTask;
+            return await File.ReadAllBytesAsync(pdf);
         }
 
     }

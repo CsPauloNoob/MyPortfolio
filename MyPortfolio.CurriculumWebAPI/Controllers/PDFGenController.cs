@@ -155,41 +155,24 @@ namespace CurriculumWebAPI.App.Controllers
 
             #endregion
 
-            await _pdfService.TestPdfServices(_mapper.Map<Curriculum>(completeCurriculum));
+           var pdfBytes =  await _pdfService.TestPdfServices(_mapper.Map<Curriculum>(completeCurriculum));
 
-            return Ok();
+            return File(pdfBytes, "application/pdf", "Paulo.pdf");
         }
 
         [HttpGet("owner")]
-        public async Task<HttpResponseMessage> GetOwnerPDF()
+        public async Task<IActionResult> GetOwnerPDF()
         {
             try
             {
                 byte[] pdfBytes = await _pdfService.GetPauloCurriculumPdf();
 
-                HttpResponseMessage response = new HttpResponseMessage();
-                response.Content = new ByteArrayContent(pdfBytes);
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
-
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = "Paulo.pdf"
-                };
-
-                return response;
-            }
-
-            catch (NotFoundInDatabaseException ex)
-            {
-                return new HttpResponseMessage()
-                { StatusCode = System.Net.HttpStatusCode.NotFound, ReasonPhrase = ex.Message };
-
+                return File(pdfBytes, "application/pdf", "Paulo.pdf");
             }
 
             catch (Exception ex)
             {
-                return new HttpResponseMessage()
-                { StatusCode = System.Net.HttpStatusCode.InternalServerError, ReasonPhrase = ex.Message };
+                return StatusCode(500, "Erro interno");
             }
         }
 

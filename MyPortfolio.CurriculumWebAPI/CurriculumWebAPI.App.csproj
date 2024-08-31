@@ -26,5 +26,10 @@
     <ProjectReference Include="..\CurriculumWebAPI.DI\CurriculumWebAPI.DI.csproj" />
     <ProjectReference Include="..\CurriculumWebAPI.Domain\CurriculumWebAPI.Domain.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<Content Include="PDFs/Paulo.pdf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
 </Project>

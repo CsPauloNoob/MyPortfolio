@@ -13,7 +13,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
         {
             var converter = new BasicConverter(new PdfTools());
 
-            var pdfDir = PdfUtils.PdfPath("Exemplo.pdf");
+            var pdfDir = PdfUtils.PdfFile("Exemplo.pdf");
 
             var doc = new HtmlToPdfDocument()
             {
@@ -43,7 +43,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 
             File.WriteAllBytes(pdfDir, pdf);
 
-            return Task.FromResult("");
+            return Task.FromResult(pdfDir);
         }
     }
 }

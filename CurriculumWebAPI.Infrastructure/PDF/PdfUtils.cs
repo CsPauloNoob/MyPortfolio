@@ -12,7 +12,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 
         static string? DefaultFolder;
 
-        public static string PdfPath(string fileName)
+        public static string PdfFile(string fileName)
         {
             var currentDir = Environment.CurrentDirectory;
             var path = Path.Combine(currentDir, "PDFs");
