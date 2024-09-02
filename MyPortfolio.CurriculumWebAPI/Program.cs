@@ -60,9 +60,10 @@ builder.Services.AddCors(
         Configuration.CorsPolicyName,
         policy =>
         policy.WithOrigins
-        (new string[]
-        { Configuration.BackendUrl,
-            Configuration.FrontendUrl
+        (   new string[]
+        {   Configuration.DevEnv_BackendUrl,
+            Configuration.DevEnv_FrontendUrl,
+            Configuration.ProdEnv_FrontendUrl
         })
         .AllowAnyHeader()
         .AllowAnyMethod()

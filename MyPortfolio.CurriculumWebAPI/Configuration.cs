@@ -4,8 +4,10 @@
     {
         public static string CorsPolicyName = "wasm";
 
-        public static string BackendUrl = "http://localhost:5260";
+        public static string DevEnv_BackendUrl = "http://localhost:5260";
         
-        public static string FrontendUrl = "http://localhost:5273";
+        public static string DevEnv_FrontendUrl = "http://localhost:5273";
+
+        public static string ProdEnv_FrontendUrl = "https://cspaulonoob.github.io/MyPortfolio.BlazorWasm/";
     }
 }
