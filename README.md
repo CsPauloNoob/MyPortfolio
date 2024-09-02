@@ -16,5 +16,9 @@ e
 
 <img src="/images/screenshot%20API.png">
 
+Pacotes utilizados:
+
+> Para conversão de HTML em PDF: https://github.com/HakanL/WkHtmlToPdf-DotNet
+
 
 > pegue uma visão geral dos endpoints com GET https://dotcurriculum.azurewebsites.net/V1/api/endpoints/htu
