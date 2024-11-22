@@ -6,10 +6,10 @@ namespace CurriculumWebAPI.App.InputModels
     {
 
         [Required]
-        [MaxLength(35)]
+        [MaxLength(50)]
         public string Nome_Curso { get; set; }
 
-        [MaxLength(35)]
+        [MaxLength(50)]
         public string Organizacao { get; set; }
     }
 }

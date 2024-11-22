@@ -2,6 +2,7 @@
 using CurriculumWebAPI.Domain.Interfaces;
 using WkHtmlToPdfDotNet;
 using System;
+using WkHtmlToPdfDotNet.Contracts;
 
 
 
@@ -9,9 +10,16 @@ namespace CurriculumWebAPI.Infrastructure.PDF
 {
     public class PdfGenerator : IPdfGenerator
     {
+
+        private readonly IConverter _converter;
+
+        public PdfGenerator(IConverter converter)
+        {
+            _converter = converter;
+        }
+
         public Task<string> Generate(Curriculum curriculum)
         {
-            var converter = new BasicConverter(new PdfTools());
 
             var pdfDir = PdfUtils.PdfFile("Exemplo.pdf");
 
@@ -39,7 +47,7 @@ namespace CurriculumWebAPI.Infrastructure.PDF
                 }
             };
 
-            byte[] pdf = converter.Convert(doc);
+            byte[] pdf = _converter.Convert(doc);
 
             File.WriteAllBytes(pdfDir, pdf);
 

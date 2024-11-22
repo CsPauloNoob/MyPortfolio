@@ -6,7 +6,7 @@ namespace CurriculumWebAPI.App.InputModels
     public class ExpProfissionalInputModel
     {
         [Required]
-        [MaxLength(40)]
+        [MaxLength(50)]
         public string Nome_Organizacao { get; set; }
         [Required]
         [MaxLength(50)]

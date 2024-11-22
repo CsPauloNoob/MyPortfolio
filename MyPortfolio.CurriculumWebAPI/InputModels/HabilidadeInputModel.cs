@@ -6,7 +6,7 @@ namespace CurriculumWebAPI.App.InputModels
     public class HabilidadeInputModel
     {
         [Required]
-        [MaxLength(35)]
+        [MaxLength(50)]
         public string Nome_Habilidade { get; set; }
 
         [MaxLength(180)]

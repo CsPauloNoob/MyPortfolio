@@ -11,19 +11,19 @@ namespace CurriculumWebAPI.App.InputModels
         public string? LinkedIn { get; set; }
 
         [MaxLength(50)]
-        public string Rua { get; set; }
+        public string? Rua { get; set; }
 
         [MaxLength(50)]
-        public string Bairro { get; set; }
+        public string? Bairro { get; set; }
 
         [MaxLength(7)]
-        public string NumeroCasa { get; set; }
+        public string? NumeroCasa { get; set; }
 
         [MaxLength(30)]
-        public string Cidade { get; set; }
+        public string? Cidade { get; set; }
 
         [MaxLength(2)]
-        public string Estado { get; set; }
+        public string? Estado { get; set; }
 
         //Retirar daqui e auto preencher na hora de salvar no banco. Código se refere ao código brasileiro de telefone +55.
         [MaxLength(3)]

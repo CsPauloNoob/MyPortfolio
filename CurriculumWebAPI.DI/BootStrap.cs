@@ -15,6 +15,8 @@ using CurriculumWebAPI.Infrastructure.IdentityConfigs.IdentityAuth;
 using CurriculumWebAPI.Infrastructure.PDF;
 using CurriculumWebAPI.Domain.Models.CurriculumBody;
 using CurriculumWebAPI.Infrastructure.IdentityConfigs;
+using WkHtmlToPdfDotNet.Contracts;
+using WkHtmlToPdfDotNet;
 
 namespace CurriculumWebAPI.DI
 {
@@ -43,18 +45,18 @@ namespace CurriculumWebAPI.DI
 
             #region DI region
             
-            services.AddScoped(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
-            services.AddScoped(typeof(IRepositoryForCollections<Formacao>), typeof(FormacaoRepository));
-            services.AddScoped(typeof(IRepositoryForCollections<Habilidades>), typeof(HabilidadeRepository));
-            services.AddScoped(typeof(IRepositoryForCollections<Cursos_Extras>), typeof(CursosExtrasRepository));
-            services.AddScoped(typeof(IRepositoryForCollections<Experiencia_Profissional>), typeof(ExperienciaProfissionalRepository));
-            services.AddScoped(typeof(IRepository<User>), typeof(UserRepository));
-            services.AddScoped(typeof(IRepository<Contato>), typeof(ContatoRepository));
-            services.AddScoped(typeof(IUserIdentity), typeof(UserIdentity));
-            services.AddScoped(typeof(IPdfGenerator), typeof(PdfGenerator));
+            services.AddTransient(typeof(IRepository<Curriculum>), typeof(CurriculumReporitory));
+            services.AddTransient(typeof(IRepositoryForCollections<Formacao>), typeof(FormacaoRepository));
+            services.AddTransient(typeof(IRepositoryForCollections<Habilidades>), typeof(HabilidadeRepository));
+            services.AddTransient(typeof(IRepositoryForCollections<Cursos_Extras>), typeof(CursosExtrasRepository));
+            services.AddTransient(typeof(IRepositoryForCollections<Experiencia_Profissional>), typeof(ExperienciaProfissionalRepository));
+            services.AddTransient(typeof(IRepository<User>), typeof(UserRepository));
+            services.AddTransient(typeof(IRepository<Contato>), typeof(ContatoRepository));
+            services.AddSingleton(typeof(IPdfGenerator), typeof(PdfGenerator));
+            services.AddTransient(typeof(IUserIdentity), typeof(UserIdentity));
+            //services.AddTransient(typeof(IPdfGenerator), typeof(PdfGenerator));
 
             services.AddSingleton(typeof(TokenGenerator));
-            services.AddSingleton(typeof(PdfGenerator));
             services.AddTransient(typeof(UserService));
             services.AddTransient(typeof(CurriculumService));
             services.AddTransient(typeof(FormacaoService));
@@ -64,6 +66,8 @@ namespace CurriculumWebAPI.DI
             services.AddTransient(typeof(PdfService));
 
             services.AddTransient(typeof(Mapper));
+
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
             #endregion
 
             var _services = services.BuildServiceProvider();
