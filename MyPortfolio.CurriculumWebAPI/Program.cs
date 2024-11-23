@@ -63,7 +63,8 @@ builder.Services.AddCors(
         (   new string[]
         {   Configuration.DevEnv_BackendUrl,
             Configuration.DevEnv_FrontendUrl,
-            Configuration.ProdEnv_FrontendUrl
+            Configuration.ProdEnv_FrontendUrl,
+            Configuration.ProdEnv_FrontendUrl2
         })
         .AllowAnyHeader()
         .AllowAnyMethod()

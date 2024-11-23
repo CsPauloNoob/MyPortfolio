@@ -9,5 +9,7 @@
         public static string DevEnv_FrontendUrl = "http://localhost:5273";
 
         public static string ProdEnv_FrontendUrl = "https://paulodev.online";
+
+        public static string ProdEnv_FrontendUrl2 = "http://paulodev.online";
     }
 }
