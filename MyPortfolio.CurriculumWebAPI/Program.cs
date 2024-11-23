@@ -55,21 +55,14 @@ builder.Services.AddDbContext<MyContext>(options =>
 
 
 //Configuração do CORS
-builder.Services.AddCors(
-    opt => opt.AddPolicy(
-        Configuration.CorsPolicyName,
-        policy =>
-        policy.WithOrigins
-        (   new string[]
-        {   Configuration.DevEnv_BackendUrl,
-            Configuration.DevEnv_FrontendUrl,
-            Configuration.ProdEnv_FrontendUrl,
-            Configuration.ProdEnv_FrontendUrl2
-        })
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials())
-    );
+builder.Services.AddCors(opt => opt.AddPolicy(
+    Configuration.CorsPolicyName,
+    policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+));
+
 
 BootStrap.Configure(builder);
 
